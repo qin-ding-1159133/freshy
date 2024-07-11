@@ -1,0 +1,34 @@
+{% extends "layouts/admin.html" %} 
+{% block title %} Admin News Details {% endblock %} 
+{% block stylesheets %} 
+    {{ super() }}
+    <link href="{{ url_for('static', filename='assets/css/Customer-dashboard.css') }}" rel="stylesheet" />
+{% endblock %} 
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light"><a href="/admin/news" class="text-muted fw-light" style="text-decoration: none;">News List</a> /</span> {{ news_item[2] }}
+    </h4>
+    <div class="card mb-4 p-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename=news_item[4].replace('app/static/', '')) }}" alt="{{ news_item[2] }}" style="max-width: 100%; height: auto;" />
+            </div>
+            <div class="col-md-6">
+                <h1 class="text-center">{{ news_item[2] }}</h1>
+                <div class="row justify-content-center mt-4">
+                    <div class="col-6 mt-2 d-flex justify-content-end">
+                        <span class="avatar-initial rounded me-1"><i class="bi bi-calendar-week"></i></span>
+                        <p>Publish Date: {{ news_item[5].strftime("%d %b %y") }}</p>
+                    </div>
+                    <div class="col-6 mt-2 d-flex justify-content-start">
+                        <span class="avatar-initial rounded me-1"><i class="bi bi-person-fill"></i></span>
+                        <p>Published by: {{ news_item[7] }}</p>
+                    </div>
+                </div>
+                <h5 class="news-content mt-5">{{ news_item[3] }}</h5> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "layouts/admin.html" %}
+{% block title %}Edit Category{% endblock %}
+{% block stylesheets %}{{ super() }}
+<link href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+rel="stylesheet"/>{% endblock %}
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Manage Products / <a href="{{ url_for('admin_product_category') }}" class="text-muted fw-light" style="text-decoration: none;">Category List</a> / </span>
+        Edit Category
+    </h4>
+    <div class="card mb-4 p-5">
+        <form method="POST" action="{{ url_for('edit_category', category_id=category[0]) }}" class="form needs-validation"
+        enctype="multipart/form-data"
+        novalidate>
+            <div class="mb-3">
+                <label for="name" class="fw-bold">Category Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ category[1] }}" title="The category name must be less than 50 characters long" required maxlength="50">
+                <div class="invalid-feedback">
+                    Please enter a category name (up to 50 characters)
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Category</button>
+        </form>
+    </div>
+</div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+    event.preventDefault()
+    event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+    }, false)
+    })
+    })()
+    </script>
+{% endblock %}

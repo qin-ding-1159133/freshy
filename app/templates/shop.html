@@ -1,0 +1,237 @@
+{% extends "layouts/base.html" %} {% block title %} Shop {% endblock %} {% block
+stylesheets %}{% endblock stylesheets %} {% block content %}
+<div class="shop">
+  <div
+    class="shop-heading row justify-content-between align-items-center ms-5 me-5"
+  >
+    <h1 class="col-2">Shop</h1>
+  </div>
+
+  <div class="ms-5 me-5">
+    <form
+      method="POST"
+      action="{{ url_for('shop') }}"
+    >
+      <div class="category row gap-3">
+        <button
+          type="submit"
+          name="category"
+          value="all"
+          class="col category"
+        >
+          Shop All
+        </button>
+        {% for category in proCategories %}
+        <button
+          type="submit"
+          name="category"
+          value="{{ category[0] }}"
+          class="col"
+          style="
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 0.25px;
+            z-index: 0;
+            padding: 12px 15px;
+            position: relative;
+            text-decoration: none;
+            border: 1px solid var(--color-text);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-text);
+            font-weight: 500;
+            transition: 0.3s;
+          "
+        >
+          {% set icons = { 1: 'ph-orange', 2: 'ph-leaf', 3: 'ph-plant', 4:
+          'ph-avocado', 5: 'ph-egg', 6: 'ph-jar', 7: 'ph-package' } %} {% if
+          category[0] in icons %}
+          <i class="ph {{ icons[category[0]] }}"></i>
+          {% endif %} {{ category[1] }}
+        </button>
+        {% endfor %}
+      </div>
+    </form>
+  </div>
+  <div class="products p-5 mb-5 mt-5 text-center">
+    {% if ProductList%}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for product in ProductList %}
+      <div class="col">
+        <div class="card">
+          <div class="card-body text-start">
+            <div class="pro_img">
+              <a href="{{ url_for('product_details', sku=product[0]) }}">
+                {% if product[5] == 7%}
+                <img
+                  class="img-fluid"
+                  src="{{ url_for('static', filename=product[6].replace('app/static/', '')) }}"
+                />
+                {% elif product[5] == 8 %}
+                <img
+                  class="img-fluid"
+                  src="{{ url_for('static', filename=product[14].replace('app/static/', '')) }}"
+                />
+                {% else %}
+                <img
+                  class="img-fluid"
+                  src="{{ url_for('static', filename=product[4].replace('app/static/', '')) }}"
+                />
+                {% endif %}</a
+              >
+            </div>
+            {% if product[18] %}
+            <div class="sale">
+              <img src="../static/assets/img/fresh-deal.png" />
+              <h6 class="text-center">{{ product[18] }}</h6>
+            </div>
+
+            {% else %} {% endif %} {% if product[5] == 7 %}
+            <h2 class="card-title">{{ product[7] }}</h2>
+            {% elif product[5] == 8%}
+            <h2 class="card-title">{{ product[13] }}</h2>
+            {% else %}
+            <h2 class="card-title">{{ product[1] }}</h2>
+            {% endif %}
+            <div class="row mb-3">
+              {% if product[5] == 7 %} {% if product[18] %}
+              <p class="card-text text-warning">
+                ${{ '%.2f' | format(product[2] * product[17]) }}<span
+                  >{{ product[8] }}</span
+                >
+                <span
+                  style="
+                    text-decoration-line: line-through;
+                    color: var(--color-grassGreen);
+                  "
+                  >was {{ product[2] }}
+                </span>
+              </p>
+              {% else %}
+              <p class="card-text">
+                ${{ product[2] }}<span>{{ product[8] }}</span>
+              </p>
+              {% endif %} {% elif product[5] == 8 %} {% if product[18] %}
+              <p class="card-text text-warning">
+                ${{ '%.2f' | format(product[2] * product[17]) }}
+              </p>
+              {% else %}
+              <p class="card-text">${{ product[2] }}</p>
+              {% endif %} {% else %} {% if product[18] %}
+              <p class="card-text text-warning">
+                ${{ '%.2f' | format(product[2] * product[17]) }}<span
+                  >{{ product[3] }}</span
+                >
+                <span
+                  style="
+                    text-decoration-line: line-through;
+                    color: var(--color-grassGreen);
+                  "
+                  >was {{ product[2] }}
+                </span>
+              </p>
+              {% else %}
+              <p class="card-text">
+                ${{ product[2] }}<span>{{ product[3] }}</span>
+              </p>
+              {% endif %} {% endif %}
+              <div class="cart">
+                {% if product[16] is none %}{% if product[5] == 7 %}
+                <a
+                  href="{{ url_for('product_details', sku=product[0]) }}"
+                  class="primary-button"
+                  style="width: 100%; margin-top: 0"
+                  >Subscribe Now
+                </a>
+                {% else %} {% if user_in_session %}
+
+                <input
+                  type="hidden"
+                  name="sku"
+                  value="{{ product[0] }}"
+                />
+                <button
+                  class="primary-button add-to-cart-button"
+                  style="width: 100%; margin-top: 0"
+                  data-sku="{{ product[0] }}"
+                  id="add-to-cart-button"
+                >
+                  Add To Cart
+                </button>
+                {% else %}
+
+                <button
+                  class="primary-button"
+                  style="width: 100%; margin-top: 0"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasLogin"
+                  aria-controls="offcanvasLogin"
+                >
+                  Add To Cart
+                </button>
+                {% endif %} {% endif %} {% else %}{% if product[5] == 7 %}
+                <a
+                  href="{{ url_for('product_details', sku=product[0]) }}"
+                  class="primary-button"
+                  style="width: 100%; margin-top: 0"
+                  >Subscribe Now
+                </a>
+                {% elif product[5] == 7 and product[16] == 0 %}
+                <button
+                  class="sold-out"
+                  style="width: 100%; margin-top: 0"
+                >
+                  Sold Out
+                </button>
+                {% elif product[5] != 7 and product[16] == 0 %}
+                <button
+                  class="sold-out"
+                  style="width: 100%; margin-top: 0"
+                >
+                  Sold Out
+                </button>
+                {% else %} {% if user_in_session %}
+
+                <input
+                  type="hidden"
+                  name="sku"
+                  value="{{ product[0] }}"
+                />
+                <button
+                  class="primary-button add-to-cart-button"
+                  style="width: 100%; margin-top: 0"
+                  data-sku="{{ product[0] }}"
+                  id="add-to-cart-button"
+                >
+                  Add To Cart
+                </button>
+                {% else %}
+
+                <button
+                  class="primary-button"
+                  style="width: 100%; margin-top: 0"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasLogin"
+                  aria-controls="offcanvasLogin"
+                >
+                  Add To Cart
+                </button>
+                {% endif %} {% endif %} {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <p>There are no products.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

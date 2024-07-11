@@ -1,0 +1,106 @@
+{% extends "layouts/manager.html" %}
+{% block title %} Add News {% endblock %}
+{% block stylesheets %}
+{{ super() }}
+<link href="{{ url_for('static', filename='assets/css/Dashboard.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light"><a href="{{ url_for('manager_news') }}" class="text-muted fw-light" style="text-decoration: none;">News List</a> /</span>
+        Add News
+    </h4>
+    <div class="card mb-4 p-5">
+        <form
+            action="{{ url_for('manager_publish_news') }}"
+            method="POST"
+            class="form needs-validation"
+            enctype="multipart/form-data"
+            novalidate
+        >
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Title:</h6></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="title"
+                        name="title"
+                        placeholder="News Title"
+                        style="font-family: var(--color-text);"
+                        required
+                        maxlength="100"
+                    />
+                    <div class="invalid-feedback">
+                        Please enter a news title (up to 100 characters).
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-12">
+                    <label class="fw-bold"><h6>Content:</h6></label>
+                    <textarea
+                        class="form-control"
+                        id="content"
+                        name="content"
+                        placeholder="News Content"
+                        style="font-family: var(--color-text); height: 300px;"
+                        required
+                        maxlength="1000"
+                    ></textarea>
+                    <div class="invalid-feedback">
+                        Please enter news content (up to 1000 characters).
+                    </div>
+                </div>
+
+                <div class="mt-5 col-md-6">
+                    <label class="fw-bold"><h6>Upload Image:</h6></label>
+                    <input
+                        type="file"
+                        id="pic"
+                        name="pic"
+                        accept="image/*"
+                        style="font-family: var(--color-text);"
+                    />
+                </div>
+
+                {% if msg %}
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      {{ msg }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+                  </div>
+                  {% endif %}
+                <div class="mt-2">
+                    <button
+                        type="submit"
+                        id="settings-button"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+'use strict'
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.from(forms).forEach(form => {
+form.addEventListener('submit', event => {
+if (!form.checkValidity()) {
+event.preventDefault()
+event.stopPropagation()
+}
+
+form.classList.add('was-validated')
+}, false)
+})
+})()
+</script>
+{% endblock content %}

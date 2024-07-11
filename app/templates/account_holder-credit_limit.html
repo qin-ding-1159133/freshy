@@ -1,0 +1,52 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Account Holder Credit Limit {% endblock %}
+{% block stylesheets %} {% endblock stylesheets %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Credit Limit / </span> My Credit 
+    </h4>
+
+    <div class="card mb-4 p-5">
+        {% if msg %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+        </div>
+        {% endif %}
+        <h5>{{account_holder_info[1]}}'s Current Credit Information</h5><br>
+        <div class="mb-3 col-md-6">
+            <label class="fw-bold"><h6>Total Credit Limit:</h6></label>
+            {% if account_balance > 0 %}
+            <input class="form-control" id="total_credit_limit" name="total_credit_limit" value="NZ$ {{ (total_credit_limit + account_balance)|float|round(2)  }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% else %}
+            <input class="form-control" id="total_credit_limit" name="total_credit_limit" value="NZ$ {{ (total_credit_limit)|float|round(2)  }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% endif %}
+        </div>
+        
+        <div class="mb-3 col-md-6">
+            <label class="fw-bold"><h6>Remaining Limit:</h6></label>
+            {% if account_balance < 0 %}
+            <input class="form-control" id="remaining_limit" name="remaining_limit" value="NZ$ {{ (total_credit_limit + account_balance)|float|round(2)  }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% elif account_balance == 0 %}
+            <input class="form-control" id="remaining_limit" name="remaining_limit" value="NZ$ {{ (total_credit_limit)|float|round(2)  }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% else %}
+            <input class="form-control" id="remaining_limit" name="remaining_limit" value="NZ$ {{ (total_credit_limit + account_balance)|float|round(2)  }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% endif %}
+        </div>
+        
+        <div class="mb-3 col-md-6">
+            <label class="fw-bold"><h6>Total Due:</h6></label>
+            {% if account_balance < 0 %}
+            <input class="form-control" id="total_due" name="total_due" value="NZ$ {{ -account_balance }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% else %}
+            <input class="form-control" id="total_due" name="total_due" value="NZ$ 0.00" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+            {% endif %}
+        </div>
+        
+        <div class="cart mb-5">
+            <a href="{{ url_for('account_holder_credit_limit_increase') }}" class="primary-button" onmouseover="this.style.color='var(--color-white)'" onmouseout="this.style.color='var(--color-text)'">Apply for Credit Limit Increase</a> 
+        </div>
+    </div>
+</div>
+{% endblock %}

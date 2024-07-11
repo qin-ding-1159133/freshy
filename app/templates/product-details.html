@@ -1,0 +1,421 @@
+{% extends "layouts/base.html" %} {% block title %} Admin Dashboard {% endblock
+%} {% block content %}
+
+<nav
+  style="--bs-breadcrumb-divider: '>'"
+  aria-label="breadcrumb"
+  class="ms-5 me-5"
+>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/products">Shop</a></li>
+    <li
+      class="breadcrumb-item active"
+      aria-current="page"
+    >
+      {% if product[5] == 7%} {{ product[7] }}{% elif product[5] == 8 %}{{
+      product[13] }}{% else %}{{ product[1] }} {% endif %}
+    </li>
+  </ol>
+</nav>
+<div class="row featurette p-5">
+  <div class="col-md-6 order-md-2">
+    <h2 class="featurette-heading fw-normal lh-1 mb-3">
+      {% if product[5] == 7%} {{ product[7] }}{% elif product[5] == 8 %}{{
+      product[13] }}{% else %}{{ product[1] }} {% endif %}
+    </h2>
+    {% if product[18] %}
+    <h1 class="featurette-heading-h1 fw-normal lh-1 mb-5 text-warning">
+      ${{ '%.2f' | format(product[2] * product[17]) }}<span
+        >{% if product[5] == 7%}{{ product[8] }}{% elif product[5] == 8 %}{%
+        else %}{{ product[3] }} {% endif %}</span
+      >
+      <span
+        style="
+          text-decoration-line: line-through;
+          color: var(--color-grassGreen);
+        "
+        >was {{ product[2] }}
+      </span>
+    </h1>
+    {% else %}
+    <h1 class="featurette-heading-h1 fw-normal lh-1 mb-5">
+      ${{ product[2] }}<span>
+        {% if product[5] == 7%}{{ product[8] }}{% elif product[5] == 8 %}{% else
+        %}{{ product[3] }} {% endif %}</span
+      >
+    </h1>
+    {% endif %}
+    <div class="cart mb-5">
+      {% if product[16] is none %}
+        {% if product[5] == 7 %}
+        <!--for customer-->
+           
+          {% else %}
+          <div>
+            <div class="mb-4">
+              {% for subscription in subscriptions %}
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-base"
+                id="{{ subscription[1] }}"
+                autocomplete="off"
+                checked
+              />
+              <label
+                class="btn"
+                for="{{ subscription[1] }}"
+                >{{ subscription[1] }}</label
+              >
+              {% endfor %}
+            </div>
+
+            {% if user_in_session %}
+
+            <input
+              type="hidden"
+              name="sku"
+              value="{{ product[0] }}"
+            />
+            <button
+              class="primary-button add-to-cart-button"
+              style="width: 70%; margin-top: 0"
+              data-sku="{{ product[0] }}"
+              id="add-to-cart-button"
+            >
+              Add To Cart
+            </button>
+            {% else %}
+
+            <button
+              class="primary-button"
+              style="width: 70%"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasLogin"
+              aria-controls="offcanvasLogin"
+            >
+              Add To Cart
+            </button>
+            {% endif %} 
+          {% endif %} 
+          {% else %}
+            {% if product[5] == 7 %}
+                    {% if role == 4%}
+
+                    <form
+                    class="d-flex gap-3"
+                    method="post"
+                    action="/checkout-subscription/{{product[0]}}"
+                  >
+                  <div class="mb-4">
+                    <label >Choose Subscription:</label>
+                    <select class="selectpart1" id="sub_type" name="sub_type" required>
+                    <option value="One-off">One-off</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Biweekly">Biweekly</option>
+                    <option value="Monthly">Monthly</option>
+
+                    </select>
+                </div>
+                    <div
+                      class="cart-quan d-flex justify-content-between text-center mt-4 mb-4"
+                      name=""
+                      style="width: 70%"
+                    >
+                      <button
+                        type="button"
+                        class="btn decrement"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        value="1"
+                        class="quantity-input text-center"
+                        style="border: none; width: 100%"
+                        id="quantity1"
+                        name="quantity1"
+                        min="1"
+                      />
+
+                      <button
+                        type="button"
+                        class="btn increment"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <input type="submit" class="btn btn-success">  
+
+                    </form>
+              <!--for account-->
+                  {%elif role== 5%}
+                  <form
+                  class="d-flex gap-3"
+                  method="post"
+                  action="/acc-checkout-subscription/{{product[0]}}"
+                >
+                  <div>
+                    <div class="mb-4">
+                        <label >Choose Subscription:</label>
+                        <select class="selectpart1" id="sub_type" name="sub_type" required>
+                        <option value="One-off">One-off</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Biweekly">Biweekly</option>
+                        <option value="Monthly">Monthly</option>
+            
+                        </select>
+                    </div>
+                    
+                    <div
+                      class="cart-quan d-flex justify-content-between text-center mt-4 mb-4"
+                      name=""
+                      style="width: 70%"
+                    >
+                      <button
+                        type="button"
+                        class="btn decrement"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        value="1"
+                        class="quantity-input text-center"
+                        style="border: none; width: 100%"
+                        id="quantity1"
+                        name="quantity1"
+                        min="1"
+                      />
+            
+                      <button
+                        type="button"
+                        class="btn increment"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <input type="submit" class="btn btn-success">  
+                  </div>
+                  </form>
+                  {% endif %}
+              {% elif product[5] == 7 and product[16] == 0 %}
+              <button
+                class="sold-out"
+                style="width: 70%"
+              >
+                Sold Out
+              </button>
+              {% elif product[5] != 7 and product[16] == 0 %}
+              <button
+                class="sold-out"
+                style="width: 70%"
+              >
+                Sold Out
+              </button>
+              {% else %} {% if user_in_session %}
+
+              <input
+                type="hidden"
+                name="sku"
+                value="{{ product[0] }}"
+              />
+              <button
+                class="primary-button add-to-cart-button"
+                style="width: 70%; margin-top: 0"
+                data-sku="{{ product[0] }}"
+                id="add-to-cart-button"
+              >
+                Add To Cart
+              </button>
+              {% else %}
+
+              <button
+                class="primary-button"
+                style="width: 70%"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasLogin"
+                aria-controls="offcanvasLogin"
+              >
+                Add To Cart
+              </button>
+              {% endif %} 
+          {% endif %}
+           {% endif %}
+        </div>
+        <p class="lead mb-5">
+          {% if product[5] == 7%}<h4 style="font-family: var(--font-heading);">Box Descriptions:</h4>{% for box_item in box_items %}<p style="font-family: var(--font-text);">{{ box_item[1] }} * {{ box_item[2] | int }}{{ box_item[3] }}</p>{% endfor %}{% elif product[5] == 8
+          %}{{ product[15] }}{% else %}{{ product[9] }} {% endif %}
+        </p>
+        <div
+          class="accordion"
+          id="accordionExample"
+        >
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                <strong>Country of Origins</strong>
+              </button>
+            </h2>
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse show"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                {% if product[5] == 7%}{{ product[12] }}{% else %}{{ product[11]
+                }} {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo"
+                aria-expanded="false"
+                aria-controls="collapseTwo"
+              >
+                <strong>Disclaimer</strong>
+              </button>
+            </h2>
+            <div
+              id="collapseTwo"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                Products are subject to change and availability. Product
+                information including images and allergens is provided by our
+                suppliers to assist customers to select suitable products.
+                However, this information may change at short notice and you
+                should always check the product labels. We endeavor to keep all
+                information up to date, but we cannot and do not guarantee
+                accuracy and completeness of this information.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <div
+          id="carouselExampleFade"
+          class="carousel slide carousel-fade"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              {% if product[5] == 7%}
+              <img
+                src="{{ url_for('static', filename=product[6].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% elif product[5] == 8%}
+              <img
+                src="{{ url_for('static', filename=product[14].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% else %}
+              <img
+                src="{{ url_for('static', filename=product[4].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% endif %}
+            </div>
+            <div class="carousel-item">
+              {% if product[5] == 7%}
+              <img
+                src="{{ url_for('static', filename=product[6].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% elif product[5] == 8%}
+              <img
+                src="{{ url_for('static', filename=product[14].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% else %}
+              <img
+                src="{{ url_for('static', filename=product[4].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% endif %}
+            </div>
+            <div class="carousel-item">
+              {% if product[5] == 7%}
+              <img
+                src="{{ url_for('static', filename=product[6].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% elif product[5] == 8%}
+              <img
+                src="{{ url_for('static', filename=product[14].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% else %}
+              <img
+                src="{{ url_for('static', filename=product[4].replace('app/static/', '')) }}"
+                class="d-block w-100"
+                alt="..."
+              />
+              {% endif %}
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleFade"
+            data-bs-slide="prev"
+          >
+            <span
+              class="carousel-control-prev-icon"
+              aria-hidden="true"
+              style="
+                background-image: url(../static/assets/img/arrow-left.png);
+                width: 50px;
+                height: 50px;
+              "
+            ></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleFade"
+            data-bs-slide="next"
+          >
+            <span
+              class="carousel-control-next-icon"
+              aria-hidden="true"
+              style="
+                background-image: url(../static/assets/img/arrow-right.png);
+                width: 50px;
+                height: 50px;
+              "
+            ></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    {% endblock content %}
+  </div>
+</div>
+

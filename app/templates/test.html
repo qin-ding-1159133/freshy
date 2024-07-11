@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+{{order_status_all}}
+
+
+<table class="table table-striped table-borderless table-hover p-4">
+    <tr class="table-success">
+      <th class="p-4"><a href="#">Order ID</a></th>
+      <th class="p-4"><a href="#">Preparing</a></th>
+      <th class="p-4"><a href="#">Ready for Delivery</a></th>
+     <th class="p-4"><a href="#">On delivery Vehicle</a></th>
+     <th class="p-4"><a href="#">Delivered</a></th>
+
+    </tr>
+
+     {% for order in status_filter_result %}
+    <tr class="table-warning clickable-row" data-href="#">
+      <td class="p-4">{{ order[0] }}</td>
+      <td class="p-4">{{ order[1] }}</td>
+
+      <td class="p-4">{{ order[2] }}</td>
+
+      <td class="p-4">{{ order[3] }}</td>
+
+      <td class="p-4">{{ order[4] }}</td>
+
+      <!-- in case it's 'begin', set it to button that can change status-->
+
+
+    </tr>
+      {% endfor %}
+
+</html>
+

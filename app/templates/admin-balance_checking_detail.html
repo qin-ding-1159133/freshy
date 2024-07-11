@@ -1,0 +1,93 @@
+{% extends "layouts/admin.html" %}
+{% block title %} Admin Account Details {% endblock %}
+{% block stylesheets %}{{ super() }}
+<link href="{{ url_for('static', filename='assets/css/Dashboard.css') }}" rel="stylesheet"/>
+{% endblock stylesheets %}
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="mb-4">
+            <span class="text-muted fw-light"><a href="/admin/balancechecking" class="text-muted fw-light" style="text-decoration: none;">Account Outstanding Balances</a> / </span> Transaction and Payment Status Report
+        </h4>
+        <div class="card mb-4 p-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-unstyled mb-4 mt-3">
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-building mb-1"></i>
+                                    <span class="fw-medium mx-2">Account Name:</span>
+                                    <span>{{ account[1] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-geo-alt mb-1"></i>
+                                    <span class="fw-medium mx-2">Account Address:</span>
+                                    <span>{{ account[2] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-envelope mb-1"></i>
+                                    <span class="fw-medium mx-2">Email:</span>
+                                    <span>{{ account[3] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-telephone mb-1"></i>
+                                    <span class="fw-medium mx-2">Phone Number:</span>
+                                    <span>{{ account[4] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-currency-dollar mb-1"></i>
+                                    <span class="fw-medium mx-2">Outstanding Balance:</span>
+                                    <span>NZD ${{ account[5] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-info-circle mb-1"></i>
+                                    <span class="fw-medium mx-2">Status:</span>
+                                    <span>{{ account[6] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-clock mb-1"></i>
+                                    <span class="fw-medium mx-2">Payment History:</span>
+                                </li>
+                                <li class="mb-3">
+                                    <table class="table table-striped table-borderless table-hover p-4">
+                                        <tr class="table-success">
+                                            <th class="p-4">Payment ID</th>
+                                            <th class="p-4">Date</th>
+                                            <th class="p-4">Amount</th>
+                                            <th class="p-4">Status</th>
+                                        </tr>
+                                        {% if payments %}
+                                            {% for payment in payments %}
+                                                <tr class="table-warning">
+                                                    <td class="p-4">{{ payment[0] }}</td>
+                                                    <td class="p-4">{{ payment[1].strftime('%d-%m-%Y') }}</td>
+                                                    <td class="p-4">NZD ${{ payment[2] }}</td>
+                                                    <td class="p-4">{{ payment[3] }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr class="table-warning">
+                                                <td colspan="4" class="p-4">
+                                                    <div class="p-3">
+                                                        <strong>No payments found for this account.</strong>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </table>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="update-profile">
+                <a
+                  class="w-100"
+                  href="/admin/account-holder-list/profile/manage-credit-limit?account_holder_id={{ account[0] }}"
+                  ><button type="button">Update Credit Limit</button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

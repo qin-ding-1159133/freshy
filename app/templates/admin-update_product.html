@@ -1,0 +1,481 @@
+{% extends "layouts/admin.html" %} {% block title %} {% endblock %} {% block
+stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    <span class="text-muted fw-light"
+      >Manage Products /
+      <a
+        href="{{ url_for('admin_product_list') }}"
+        class="text-muted fw-light"
+        style="text-decoration: none"
+        >Produce List</a
+      >
+      / <a href="{{ url_for('admin_product_details', product_id=product_id) }}" class="text-muted fw-light" style="text-decoration: none;">{{product_info[0]}}</a> /</span
+    >
+
+    Update Details
+  </h4>
+
+  <div class="card mb-4 p-5">
+    <form
+      action="/admin/product-list/product/update"
+      method="POST"
+      class="form needs-validation"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <!--list profile-->
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce ID:</h6></label>
+          <input
+            class="form-control"
+            id="product_id"
+            name="product_id"
+            value="{{product_id}}"
+            style="font-family: var(--color-text); background-color: #f5f5f5"
+            readonly
+          />
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Category:</h6></label>
+          <div>
+            <select
+              class="selectpart1 form-control"
+              id="product_category_id"
+              name="product_category_id"
+              style="
+                width: 100%;
+                height: 38px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+              "
+              required
+            >
+              {% for categories in product_categories %} {% if
+              categories[0]==product_info[9] %}
+              <option
+                value="{{categories[0]}}"
+                selected
+              >
+                {{categories[1]}}
+              </option>
+              {% else %}
+              <option value="{{categories[0]}}">{{categories[1]}}</option>
+              {% endif %} {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Name:</h6></label>
+          <input
+            class="form-control"
+            id="product_name"
+            name="product_name"
+            value="{{product_info[0]}}"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="The product name must be less than 50 characters long"
+            required
+            maxlength="50"
+          />
+          <div class="invalid-feedback">
+            Please enter a produce name (up to 50 characters)
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>SKU:</h6></label>
+          <input
+            class="form-control"
+            name="sku"
+            id="sku"
+            value="{{product_info[1]}}"
+            style="font-family: var(--color-text); background-color: #f5f5f5"
+            readonly
+          />
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Unit:</h6></label>
+          <select id="unit" name="unit" class="selectpart1 form-control" style="
+          width: 100%;
+          height: 38px;
+          border: 1px solid #ced4da;
+          border-radius: 5px;
+        "
+        required>
+            {% for unit in list_unit %}
+              {% if unit[0]==product_info[2] %}
+                <option value="{{unit[0]}}" selected>{{unit[1]}}</option>
+              {% else %}
+                <option value="{{unit[0]}}">{{unit[1]}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Description:</h6></label>
+          <input
+            type="text"
+            class="form-control"
+            id="product_des"
+            name="product_des"
+            value="{{product_info[4]}}"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="The product description must be less than 300 characters long"
+            required
+            maxlength="300"
+          />
+          <div class="invalid-feedback">
+            Please enter a produce description (up to 300 characters)
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Price (NZ$):</h6></label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            id="product_price"
+            name="product_price"
+            value="{{product_info[8]}}"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="Please enter a produce price (minimum value is 1)"
+            required
+            min="1"
+          />
+          <div class="invalid-feedback">Please enter a produce price (minimum value is 1)</div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Stock Quantity:</h6></label>
+          <input
+            type="number"
+            step="1"
+            class="form-control"
+            id="stock_quantity"
+            name="stock_quantity"
+            value="{{stock_info[2]}}"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="Please enter a stock quantity (minimum value is 1)"
+            required
+            min="1"
+          />
+          <div class="invalid-feedback">Please enter a stock quantity (minimum value is 1)</div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Promotion Type:</h6></label>
+          <div>
+            <select
+              class="selectpart1 form-control"
+              id="promotion_type_id"
+              name="promotion_type_id"
+              style="
+                width: 100%;
+                height: 38px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+              "
+              required
+            >
+              {% for promotion in promotion_type %} {% if
+              promotion[0]==product_info[10] %}
+              <option
+                value="{{promotion[0]}}"
+                selected
+              >
+                {{promotion[1]}}
+              </option>
+              {% else %}
+              <option value="{{promotion[0]}}">{{promotion[1]}}</option>
+              {% endif %} {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Produce Origins:</h6></label>
+          <div>
+            <select
+              class="selectpart1 form-control"
+              id="product_origins"
+              name="product_origins"
+              style="
+                width: 100%;
+                height: 38px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+              "
+              required
+            >
+              {% if product_info[5]=='Product of New Zealand' %}
+              <option
+                value="Product of New Zealand"
+                selected
+              >
+                Product of New Zealand
+              </option>
+              <option value="Product of Overseas">Product of Overseas</option>
+              {% else %}
+              <option value="Product of New Zealand">
+                Product of New Zealand
+              </option>
+              <option
+                value="Product of Overseas"
+                selected
+              >
+                Product of Overseas
+              </option>
+              {% endif %}
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-5 col-md-6">
+          <label class="fw-bold"><h6>Upload Image:</h6></label>
+          <input
+            type="file"
+            id="image1"
+            name="image1"
+            accept="image/*"
+            style="font-family: var(--color-text)"
+            multiple
+          />
+        </div>
+        <div class="mb-3 col-md-6">
+          <input
+            type="hidden"
+            id="depot_id"
+            name="depot_id"
+            value="{{depot_id}}"
+          />
+        </div>
+        <input
+          type="hidden"
+          value="{{product_info[3]}}"
+          id="old_image"
+          name="old_image"
+        />
+        {% if msg %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+            </div>
+        {% endif %}
+        <div class="mt-2">
+          <button
+            type="submit"
+            id="settings-button"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#createProductModal"
+          >
+            Duplicate in Another Depot
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Structure -->
+<div
+  class="modal fade"
+  id="createProductModal"
+  tabindex="-1"
+  aria-labelledby="createProductModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="createProductModalLabel"
+        >
+          Duplicate in Another Depot
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% if depots|length == 0 %}
+        <p>This produce is already available in all depots.</p>
+        {% else %}
+        <form
+          id="createProductForm"
+          action="/admin/product-list/product/move_to_depot"
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="mb-3">
+            <label
+              for="depotSelect"
+              class="form-label"
+              >Select Depot</label
+            >
+            <select
+              class="form-select"
+              id="depotSelect"
+              name="depot_id"
+              required
+            >
+              {% for depot in depots %}
+              <option value="{{ depot[0] }}">{{ depot[1] }}</option>
+              {% endfor %}
+            </select>
+            <div class="invalid-feedback">Please select a depot.</div>
+          </div>
+          <div class="mb-3">
+            <label
+              for="stockQuantity"
+              class="form-label"
+              >Stock Quantity</label
+            >
+            <input
+              type="number"
+              step="0.01"
+              placeholder="0.00"
+              class="form-control"
+              id="stockQuantity"
+              name="stock_quantity"
+              min="0"
+              required
+            />
+            <div class="invalid-feedback">Please enter a stock quantity with two decimal places</div>
+          </div>
+          <input
+            type="hidden"
+            name="new_product_id"
+            value="{{ new_product_id }}"
+          />
+          <input
+            type="hidden"
+            name="product_category_id"
+            value="{{ product_info[9] }}"
+          />
+          <input
+            type="hidden"
+            name="product_name"
+            value="{{ product_info[0] }}"
+          />
+          <input
+            type="hidden"
+            name="sku"
+            value="{{ product_info[1] }}"
+          />
+          <input
+            type="hidden"
+            name="unit"
+            value="{{ product_info[2] }}"
+          />
+          <input
+            type="hidden"
+            name="product_des"
+            value="{{ product_info[4] }}"
+          />
+          <input
+            type="hidden"
+            name="product_price"
+            value="{{ product_info[8] }}"
+          />
+          <input
+            type="hidden"
+            name="promotion_type_id"
+            value="{{ product_info[10] }}"
+          />
+          <input
+            type="hidden"
+            name="product_origins"
+            value="{{ product_info[5] }}"
+          />
+          <input
+            type="hidden"
+            name="old_image"
+            value="{{ product_info[3] }}"
+          />
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="btn btn-success glow"
+            >
+              Confirm
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  ;(() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        'submit',
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        },
+        false
+      )
+    })
+  })()
+
+  // JavaScript for form validation and modal handling
+  document.addEventListener('DOMContentLoaded', () => {
+    const createProductForm = document.getElementById('createProductForm')
+    createProductForm.addEventListener('submit', (event) => {
+      if (!createProductForm.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      createProductForm.classList.add('was-validated')
+    })
+  })
+</script>
+
+{% endblock content %}

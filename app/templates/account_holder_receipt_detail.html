@@ -1,0 +1,66 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Account Holder Receipt Details {% endblock %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light"><a href="/account_holder/orders" class="text-muted fw-light" style="text-decoration: none;">My orders</a> / </span> Receipt Details
+    </h4>
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card p-3">
+                <div class="card-body">
+                    {% if thereceipt %}
+                        <h5>Order Receipt</h5>
+                        <p>Order Number: {{ thereceipt[5] }} (placed on {{ thereceipt[4].strftime('%d %B %Y') }})</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Bill to:</h6>
+                                <p>{{ thereceipt[0] }}<br>{{ thereceipt[1] }}, New Zealand<br>{{ thereceipt[2] }}<br>{{ thereceipt[3] }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Ship to:</h6>
+                                <p>{{ thereceipt[0] }}<br>{{ thereceipt[1] }}, New Zealand<br>{{ thereceipt[2] }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6>Order Summary</h6>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ITEM</th>
+                                    <th>QTY</th>
+                                    <th>UNIT</th>
+                                    <th>UNIT PRICE</th>
+                                    <th>SUBTOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for line in order_lines %}
+                                <tr>
+                                    <td>{{ line[0] }}</td>
+                                    <td>{{ line[2] }}</td>
+                                    <td>{{ line[4] }}</td>
+                                    <td>NZD ${{ line[1] }}</td>
+                                    <td>NZD ${{ line[3] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Item Subtotal: NZD ${{ thereceipt[9] - thereceipt[8] }}<br>Shipping Fee: NZD ${{ thereceipt[8] }}<br>Including GST: NZD ${{ (thereceipt[6] * thereceipt[9]) | round(2) }}<br><strong>Total: NZD ${{ thereceipt[9] }}</strong></p>
+                            </div>
+                        </div>
+                        <hr>
+                    {% else %}
+                        <p>{{ msg }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

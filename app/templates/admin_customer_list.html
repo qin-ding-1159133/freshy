@@ -1,0 +1,91 @@
+{% extends "layouts/admin.html" %} {% block title %} Admin Staff List {%
+endblock %} {% block stylesheets %}{% endblock stylesheets %} {% block content
+%}
+<!-- Preloader -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    <span class="text-muted fw-light">Manage Accounts / </span>
+
+    Customer List
+  </h4>
+  <div class="card mb-4 p-3">
+    <div class="row d-flex justify-content-between mb-4 mt-3">
+      <div class="">
+        <form
+          method="POST"
+          class="d-flex gap-3"
+          action="{{ url_for('admin_customerlist') }}"
+        >
+          <label>
+            <input
+              type="search"
+              name="searchinput"
+              class="form-control"
+              placeholder="Search Name"
+              aria-controls="DataTables_Table_0"
+            />
+          </label>
+          <button type="submit"><i class="bi bi-search me-2"></i>Search</button>
+          <div class="d-flex gap-3"><div class="filter">
+            <select name="depot_id" id="depot_id" class="form-select text-capitalize" onchange="this.form.submit()" style="width: 200px">
+              <option value="all">All Depots</option> <!-- Special option for all depots -->
+              {% for depot in depot_all %}
+              <option value="{{ depot[0] }}" {% if request.form.depot_id == depot[0] %}selected{% endif %}>
+                  {{ depot[1] }} 
+              </option>
+              {% endfor %}
+          </select>
+            </div>      
+            <div class="d-flex">
+        <a href="{{ url_for('admin_customerlist') }}">
+          <button class="btn">Show All</button>
+        </a>
+      </div>
+        </form>
+      </div>
+
+
+    </div>
+    <div class="">
+      <table class="table table-striped table-borderless table-hover p-4">
+        <tr class="table-success">
+          <th class="p-4">Title</th>
+          <th class="p-4">First Name</th>
+          <th class="p-4">Last Name</th>
+          <th class="p-4">Phone Number</th>
+          <th class="p-4">Depot</th>
+          <th class="p-4">Status</th>
+          <th class="p-4">Check Details</th>
+        </tr>
+
+        {% if allprofile %} {% for profile in allprofile %}
+        <tr class="table-warning">
+          <td class="p-4">{{ profile[1] }}</td>
+          <td class="p-4">{{ profile[2] }}</td>
+          <td class="p-4">{{ profile[3] }}</td>
+          <td class="p-4">{{ profile[7] }}</td>
+          <td class="p-4">{{ profile[10] }}</td>
+          <td class="p-4">{{ profile[11] }}</td>
+          <td class="p-4 text-center">
+            <a href="/admin/customerprofile/{{ profile[0] }}"
+              ><i class="bi bi-search"></i
+            ></a>
+          </td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr class="table-warning">
+          <td colspan="7" class="p-4">
+            <div class="p-3">
+              <strong>No customer found matching the search criteria.</strong><br /><br />
+              Please try refining your search terms or
+              <a href="{{ url_for('admin_customerlist') }}" class="alert-link">view all customers</a>
+            </div>
+          </td>
+        </tr>
+        
+        {% endif %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

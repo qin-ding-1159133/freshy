@@ -1,0 +1,164 @@
+{% extends "layouts/staff.html" %} {% block title %} {% endblock %} {% block
+stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Product.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    <span class="text-muted fw-light"
+      >Manage Products /
+      <a
+        href="{{ url_for('staff_premade_box_list') }}"
+        class="text-muted fw-light"
+        style="text-decoration: none"
+        >Premade Box List</a
+      >
+      /</span
+    >
+
+    {{ product[0][1]}}
+  </h4>
+  <div class="row featurette p-5">
+    {% if msg %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+    </div>
+    {% endif %}
+    <div class="col-md-6 order-md-2">
+      <h2 class="featurette-heading fw-normal lh-1 mb-3">
+        {{ product[0][1] }}
+      </h2>
+      <h1 class="featurette-heading-h1 fw-normal lh-1 mb-5">
+        ${{ product[0][2] }} <span>{{ product[0][3] }}</span>
+      </h1>
+      {% for box_item in box_items %}
+      <p style="font-family: var(--font-text)">
+        {{ box_item[1] }} * {{ box_item[2] | int }}{{ box_item[3] }}
+      </p>
+      {% endfor %}
+      <div
+        class="accordion"
+        id="accordionExample"
+      >
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              <strong>Country of Origins</strong>
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">{{ product[0][6] }}</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              <strong>Disclaimer</strong>
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              Products are subject to change and availability. Product
+              information including images and allergens is provided by our
+              suppliers to assist customers to select suitable products.
+              However, this information may change at short notice and you
+              should always check the product labels. We endeavor to keep all
+              information up to date, but we cannot and do not guarantee
+              accuracy and completeness of this information.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 order-md-1">
+      <div
+        id="carouselExampleFade"
+        class="carousel slide carousel-fade"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              src="{{ url_for('static', filename=product[0][4].replace('app/static/', '')) }}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{{ url_for('static', filename=product[0][4].replace('app/static/', '')) }}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{{ url_for('static', filename=product[0][4].replace('app/static/', '')) }}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleFade"
+          data-bs-slide="prev"
+        >
+          <span
+            class="carousel-control-prev-icon"
+            aria-hidden="true"
+            style="
+              background-image: url(../static/assets/img/arrow-left.png);
+              width: 50px;
+              height: 50px;
+            "
+          ></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleFade"
+          data-bs-slide="next"
+        >
+          <span
+            class="carousel-control-next-icon"
+            aria-hidden="true"
+            style="
+              background-image: url(../static/assets/img/arrow-right.png);
+              width: 50px;
+              height: 50px;
+            "
+          ></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+</div>

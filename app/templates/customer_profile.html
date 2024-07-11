@@ -1,0 +1,126 @@
+{% extends "layouts/base-dashboard.html" %} {% block title %} Customer Dashboard
+{% endblock %} {% block stylesheets %} {% endblock stylesheets %} {% block
+content %}
+
+<!-- Preloader -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="profile-card mb-4">
+    <div class="user-profile-header-banner">
+      <img
+        src="{{ url_for('static', filename='assets/img/profile-banner.jpg') }}"
+        alt="Banner image"
+      />
+    </div>
+    <div
+      class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4"
+    >
+      <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
+        <img
+          src="{{ url_for('static', filename=profile[9].replace('app/static/', '')) }}"
+          alt="user image"
+          class="d-block ms-0 ms-sm-4 rounded user-profile-img"
+          style="border-color: #fff"
+        />
+      </div>
+      <div class="flex-grow-1 mt-3 mt-sm-5">
+        <div
+          class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4"
+        >
+          <div class="user-profile-info mb-1">
+            <h4>{{profile[2]}}</h4>
+            <ul
+              class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2"
+            >
+              <li class="list-inline-item fw-medium">
+                <i class="bi bi-person-lines-fill"></i> {{profile[2]}}
+              </li>
+              <li class="list-inline-item fw-medium">
+                <i class="bi bi-telephone"></i> {{profile[7]}}
+              </li>
+              <li class="list-inline-item fw-medium">
+                <i class="bi bi-envelope"></i> {{profile[4]}}
+              </li>
+            </ul>
+          </div>
+          <div class="update-profile">
+            <a
+              class="w-100"
+              href="{{url_for('customer_profileupdate')}}"
+              ><button type="button">Update My Profile</button>
+            </a>
+          </div>
+          <div class="update-profile">
+            <a
+              class="w-100"
+              href="{{url_for('customer_password_update')}}"
+              ><button type="button">Update My Password</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if msg %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+    </div>
+    {% endif %}
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <small class="text-muted text-uppercase">About</small>
+          <ul class="list-unstyled mb-4 mt-3">
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-gender-ambiguous mb-1"></i
+              ><span class="fw-medium mx-2">Title:</span>
+              <span>{{profile[1]}}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-file-earmark-text mb-1"></i
+              ><span class="fw-medium mx-2">Full Name:</span>
+              <span>{{profile[2]}} {{profile[3]}}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-check2 mb-1"></i
+              ><span class="fw-medium mx-2">Status:</span>
+              <span>{{ profile[11] }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-star mb-1"></i
+              ><span class="fw-medium mx-2">Role:</span>
+              <span>Customer</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <small class="text-muted text-uppercase">Contacts</small>
+          <ul class="list-unstyled mb-4 mt-3">
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-telephone mb-1"></i
+              ><span class="fw-medium mx-2">Phone Number:</span>
+              <span>{{ profile[7] }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-envelope mb-1"></i
+              ><span class="fw-medium mx-2">Email:</span>
+              <span>{{ profile[4] }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-geo-alt-fill mb-1"></i
+              ><span class="fw-medium mx-2">Address:</span>
+              <span>{{ profile[5] }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-buildings mb-1"></i></i
+              ><span class="fw-medium mx-2">City:</span>
+              <span>{{ profile[10] }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

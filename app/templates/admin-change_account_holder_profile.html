@@ -1,0 +1,190 @@
+{% extends "layouts/admin.html" %} {% block title %} {% endblock %} {% block stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %} 
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <!--shane temp starts-->
+        
+          <h4 class="mb-4">
+            <span class="text-muted fw-light">Manage Accounts / <a href="{{ url_for('admin_account_holder_list') }}" class="text-muted fw-light" style="text-decoration: none;">Account Holder List</a> / 
+            <a href="/admin/account-holder-list/profile?account_holder_id={{profileinfo[0]}}" class="text-muted fw-light" style="text-decoration: none;">{{ profileinfo[2] }}</a> / </span>Update Profile
+
+
+          </h4>
+
+          <div class="card mb-4 p-5">
+            <form
+            action="/admin/account-holder-list/profile/update?account_user_id={{ profileinfo[1] }}"
+              method="POST"
+              class="form needs-validation"
+              enctype="multipart/form-data"
+            >
+              <!--list profile-->
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Account Name:</h6></label>
+                  <input
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    maxlength="30"
+                    value="{{profileinfo[2]}}"
+                    required
+                    style="font-family: var(--color-text);"
+                  />
+                  <div class="invalid-feedback">Please enter your Name</div>
+                </div>
+
+               
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Email:</h6></label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      id="email"
+                      name="email"
+                      value="{{profileinfo[5]}}"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter the right Email address
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Phone:</h6></label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      value="{{profileinfo[6]}}"
+                      min="0"
+                      step="1"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter the Phone number
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Depot:</h6></label>
+                    <div><select class="selectpart1 form-control" id="depot" name="depot" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[10] == depot_all[0][0] %} selected {%endif%} value="{{depot_all[0][0]}}">{{depot_all[0][1]}}</option>
+                      <option  {%if profileinfo[10] == depot_all[1][0]%} selected {%endif%} value="{{depot_all[1][0]}}">{{depot_all[1][1]}}</option>
+                      <option {%if profileinfo[10] == depot_all[2][0]%} selected {%endif%}  value="{{depot_all[2][0]}}">{{depot_all[2][1]}}</option>
+                      <option {%if profileinfo[10] == depot_all[3][0]%} selected {%endif%}  value="{{depot_all[3][0]}}">{{depot_all[3][1]}}</option>
+                      <option {%if profileinfo[10] == depot_all[4][0]%} selected {%endif%}  value="{{depot_all[4][0]}}">{{depot_all[4][1]}}</option>
+ 
+                    </select></div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Status:</h6></label>
+                    <div><select class="selectpart1 form-control" id="status" name="status" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[11] == "Active" %} selected {%endif%} value="Active">Active</option>
+                      <option  {%if profileinfo[11] == "Inactive" %} selected {%endif%} value="Inactive">Inactive</option>
+                     </select></div>
+                  </div>
+
+          
+
+                <div class="mt-5 col-md-6">
+                  <label class="fw-bold"><h6>Upload New image:</h6></label>
+                  <input
+                    type="file"
+                    id="image1"
+                    name="image1"
+                    accept="image/*"
+                    style="font-family: var(--color-text);"
+                    multiple
+                  />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Delete Current image:</h6></label>
+                  <a
+                    class="btn "
+                    data-bs-toggle="modal"
+                    data-bs-target="#myModal"
+                    ><button >Delete</button></a
+                  >
+                <!-- The Modal -->
+                <div
+                  class="modal"
+                  id="myModal"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete</h4>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                        ></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure to delete the image?
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <a
+                        href="/admin/account-holder-list/profile/delete-account-holder-img?account_user_id={{ profileinfo[1] }}"
+                          class="btn fs-6 btn-success glow"
+                          >Yes</a
+                        >
+
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+  
+              {% if msg %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  {{ msg }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+              </div>
+              {% endif %}
+
+
+                <div class="mt-2">
+                  <button
+                    type="submit"
+                    id="settings-button"
+                  >
+                    Save
+                  </button>
+
+                </div>
+              </div>
+            </form>
+          </div>
+       
+      
+    </div>
+
+
+
+   
+  {% endblock content %}
+
+

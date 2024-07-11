@@ -1,0 +1,133 @@
+{% extends "layouts/admin.html" %} {% block title %} Admin Dashboard {% endblock
+  %}{% block stylesheets %} {{ super() }}
+  <link
+    href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+    rel="stylesheet"
+  />
+  {% endblock %} {% block content %}
+
+<!-- Preloader -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    <span class="text-muted fw-light">Manage Products / </span>
+
+    Shipment List
+  </h4>
+
+  
+  <div class="card mb-4 p-3">  
+    {% if msg %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+    </div>
+    {% endif %}
+    <div class="row d-flex justify-content-between mb-4 mt-3">
+
+            
+      </div>
+    <div class="">
+      <table class="table table-striped table-borderless table-hover p-4">
+        <tr class="table-success">
+          <th class="p-4">Depot</th>
+          <th class="p-4">Shipment price(NZD$)</th>
+          <th class="p-4">Check Details</th>
+        </tr>
+
+        {% if shippments %} 
+        {% for shippment in shippments %}
+        <tr class="table-warning">
+          <td class="p-4">{{ shippment[3] }}</td>
+          <td class="p-4">{{ shippment[1] }}</td>
+          <td class="p-4">
+            <div><button class="btn subscription-check subscription-check" type="button"data-bs-toggle="modal" data-bs-target="#myModaladd_{{shippment[0]}}">Change</button></div>
+          </td>
+        </tr>
+        <div class="">
+        <form
+          class="d-flex gap-3"
+          action="{{ url_for('admin_changeshippment',shippment_id1=shippment[0]) }}"
+          method="post"
+        >
+      <!-- The Modal -->
+      <div class="modal" id="myModaladd_{{shippment[0]}}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+          <div class="modal-header">
+          <h4 class="modal-title"> Update Shipment</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+        <row>
+
+          <div class="mb-3 mt-3">
+              <label class="form-label" >Depot:</label>
+              <input
+              class="form-control"
+              id="product_price"
+              name="depot"
+              placeholder="0.00"
+              size="10"
+              value="{{shippment[3]}}"
+              style="font-family: var(--color-text);"
+              readonly
+            />
+          </div>
+          <input name="id" value="{{shippment[0]}}" hidden>
+          <label class="fw-bold"><h6>Shipment Price (NZ$): </h6></label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            id="product_price"
+            name="price"
+            value="{{shippment[1]}}"
+            placeholder="0.00"
+            size="10"
+            style="font-family: var(--color-text);"
+            required
+          />
+          <div class="invalid-feedback">
+            Please enter the price.
+          </div>
+        </div>
+      </row>
+
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-success">  
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+      </div>
+      </div>
+
+
+      <!--modal ends-->        
+      </form>
+      {% endfor %} 
+
+
+        {% else %}     
+       </table>
+        <tr class="table-warning">
+          <td colspan="8" class="p-4">
+            <div class="p-3">
+              <strong>No shippment found.</strong><br /><br />
+            </div>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+    
+    </div>
+    </div>
+  
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "layouts/base-fullscreen.html" %} {% block title %} Checkout {%
+endblock %} {% block stylesheets %}{% endblock stylesheets %} {% block content
+%}
+<form
+  id="checkout-form"
+  action="/acc/paysubscription"
+  class="needs-validation"
+  novalidate=""
+  method="POST"
+>
+  <div class="container-sm checkout">
+    <div class="row g-5">
+      <div class="col-md-6 offset-md-3">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span>Your cart</span>
+          <span class="badge text-bg-warning rounded-pill"
+            >{{ subscription | length }}</span
+          >
+        </h4>
+        <ul class="list-group mb-3">
+          {% for sku, details in sub.items() %}
+          <li
+            class="cart-prod list-group-item d-flex justify-content-between lh-sm"
+          >
+            <div>
+              <h6 class="my-0">{{ details['name'] }}</h6>
+              <small
+                class="prod-qty text-body-secondary"
+                data-qty="{{ details['quantity'] }}"
+                >QTY: {{ details['quantity'] }}
+              </small>
+            </div>
+            <span
+              class="prod-price text-body-secondary"
+              data-price="{{ ((details['price'] | float) * (details['quantity'] | int)) | round(2) }}"
+            >
+              ${{ '%.2f' | format((details['price'] | float) *
+              (details['quantity'] | int)) }}
+            </span>
+          </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <h6 class="my-0">Subtotal in NZD</h6>
+            <strong class="subtotal">$0.00</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">Shipping in NZD</h6>
+            </div>
+            <strong
+              class="shipping-cost"
+              data-shipping="{{ sub[sku1].ship }}"
+            >
+              ${{ sub[sku1].ship }}
+            </strong>
+          </li>
+          <li
+            class="list-group-item bg-body-tertiary deducted"
+            style="display: none"
+          >
+            <div class="text-success">
+              <h6 class="my-0">Deducted</h6>
+            </div>
+            <span
+              class="text-success deducted-amount"
+              name="deducted"
+              >-$0.00</span
+            >
+            <input
+              type="hidden"
+              name="deducted"
+              id="deducted"
+              value="0.00"
+            />
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <h6 class="my-0">Total in NZD (Including GST)</h6>
+            <strong
+              class="total"
+              name="total-display"
+              >$0.00</strong
+            >
+            <input
+              type="hidden"
+              name="total"
+              id="total"
+              value="0.00"
+            />
+          </li>
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between p-3">
+            <div>
+              <h6 class="my-0">
+                Credit:
+                <strong class="credit">${{ credit[0] }}</strong>
+              </h6>
+            </div>
+
+            <div>
+              <h6 class="my-0">
+                Balance:
+                <strong class="balance">${{ balance[0]}}</strong>
+              </h6>
+            </div>
+            <input
+              type="hidden"
+              name="updated_balance"
+              id="updated-balance"
+              value="0.00"
+            />
+          </li>
+        </ul>
+        {% if error %}
+        <div
+          class="alert alert-danger mt-5"
+          role="alert"
+        >
+          {{ error }}
+        </div>
+        {% endif %}
+        <button
+          class="primary-button btn-lg mt-5 d-grid col-6 mx-auto"
+          type="submit"
+        >
+          Proceed to Pay
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    updateTotals()
+
+    document
+      .querySelectorAll('input[type="checkbox"]')
+      .forEach(function (checkbox) {
+        checkbox.addEventListener('change', updateTotals)
+      })
+
+    document
+      .querySelector('#checkout-form')
+      .addEventListener('submit', function (event) {
+        updateTotals()
+      })
+
+    function updateTotals() {
+      let subtotal = 0.0
+      document.querySelectorAll('.cart-prod').forEach(function (item) {
+        let price = parseFloat(item.querySelector('.prod-price').dataset.price)
+        subtotal += price
+      })
+      subtotal = subtotal.toFixed(2)
+      document.querySelector('.subtotal').textContent = `$${subtotal}`
+
+      let shipping = parseFloat(
+        document.querySelector('.shipping-cost').dataset.shipping
+      )
+      let total = (parseFloat(subtotal) + shipping).toFixed(2)
+      document.querySelector('.total').textContent = `$${total}`
+      document.getElementById('total').value = total
+    }
+  })
+</script>
+{% endblock content %}

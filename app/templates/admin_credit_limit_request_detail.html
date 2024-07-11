@@ -1,0 +1,75 @@
+{% extends "layouts/admin.html" %}
+{% block title %} Request Detail {% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4"><span class="text-muted fw-light"><a href="/admin/credit_limit_pending_requests" class="text-muted fw-light" style="text-decoration: none;">Account Application and Credit Increase Requests</a> /</span> Request Details</h4>
+    {% if request_detail %}
+    <div class="card mb-4 p-5">
+        <form method="POST">
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Request ID:</h6></label>
+                    <input class="form-control" id="request_id" name="request_id" value="{{ request_detail[0] }}" readonly />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Account Name:</h6></label>
+                    <input class="form-control" id="account_name" name="account_name" value="{{ request_detail[9] }}" readonly />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Current Credit Limit:</h6></label>
+                    <input class="form-control" id="current_limit" name="current_limit" value="{{ request_detail[10] }}" readonly />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Requested Credit Limit:</h6></label>
+                    <input class="form-control" id="requested_limit" name="requested_limit" value="{{ request_detail[1] }}" readonly />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Submission Date:</h6></label>
+                    <input class="form-control" id="submission_date" name="submission_date" value="{{ request_detail[7].strftime('%d-%m-%Y') }}" readonly />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Increase Reason/Applicatin Reason:</h6></label>
+                    <textarea class="form-control" id="increase_reason" name="increase_reason" readonly>{{ request_detail[6] }}</textarea>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Support Doc:</h6></label>
+                    {% if request_detail[2] %}
+                        <a href="{{ url_for('static', filename=request_detail[2].split('app/static/')[1]) }}" download><i class="bi bi-arrow-down-square-fill"></i></a>
+                    {% else %}
+                        No document
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-12">
+                    <label class="fw-bold"><h6>Decline Reason (if Declining):</h6></label>
+                    <textarea class="form-control" id="decline_reason" name="decline_reason" {% if request_detail[3] != 'Pending' %}readonly{% endif %}>{{ request_detail[8] if request_detail[8] else '' }}</textarea>
+                </div>
+            </div>
+
+            {% if request_detail[3] == 'Pending' %}
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" name="action" value="decline" class="btn btn-danger">Decline</button>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        Request details not found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

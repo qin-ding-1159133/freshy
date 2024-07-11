@@ -1,0 +1,36 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Apply for Credit Limit Increase {% endblock %}
+{% block stylesheets %}
+{% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Credit Limit / <a href="/account-holder/credit-limit" class="text-muted fw-light" style="text-decoration: none;">My Credit</a> / </span>  Apply for Credit Limit Increase</h4>
+    <div class="card mb-4 p-5">
+        {% if msg %}
+        <div class="alert alert-warning">
+          {{ msg }}<div>Click <a href="{{ url_for('account_holder_credit_limit_request_status') }}" style="font-weight: bolder;">HERE</a> to see your application status</div>
+        </div>
+        
+        <br>
+        {% endif %}
+        {% if not pending_application %}
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="amount" class="form-label">Request Increase Credit Limit Amount(NZD $)</label>
+                <input type="number" class="form-control form-control-tall" id="amount" name="amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="business_revenue_and_reason" class="form-label">Business Revenue and Reasons for Increase</label>
+                <textarea class="form-control form-control-tall" id="business_revenue_and_reason" name="business_revenue_and_reason" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="supporting_documents" class="form-label">Supporting Documents</label>
+                <input type="file" class="form-control form-control-tall" id="supporting_documents" name="supporting_documents" multiple>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

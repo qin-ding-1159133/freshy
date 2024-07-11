@@ -1,0 +1,55 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Credit Limit Request Detail {% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Credit Limit / <a href="/account-holder/credit-limit-request-status" class="text-muted fw-light" style="text-decoration: none;">Request Status</a> /</span> Request Details 
+    </h4>
+    <div class="card mb-4 p-5">
+        <div class="alert alert-warning">This page is for your application records and is read-only. 
+            You can submit a new application for a credit limit increase once your status is updated to either Approved or Declined. 
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Request ID:</h6></label>
+                <input class="form-control" id="request_detail" name="request_detail" value="{{ request_detail[0] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Account Name:</h6></label>
+                <input class="form-control" id="account_name" name="account_name" value="{{ request_detail[9] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Current Credit Limit:</h6></label>
+                <input class="form-control" id="current_credit" name="request_date" value="{{ request_detail[10] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Requested Credit Limit:</h6></label>
+                <input class="form-control" id="request_credit" name="request_date" value="{{ request_detail[1] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Request Date:</h6></label>
+                <input class="form-control" id="request_date" name="request_date" value="{{ request_detail[7].strftime('%d-%m-%Y') }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Request Reason:</h6></label>
+                <input class="form-control" id="request_reason" name="request_reason" value="{{ request_detail[6] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Decline Reason(if Declining):</h6></label>
+                <input class="form-control" id="request_reason" name="request_reason" value="{{ request_detail[8] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <label class="fw-bold"><h6>Request Status:</h6></label>
+                <input class="form-control" id="request_status" name="request_status" value="{{ request_detail[3] }}" style="font-family: var(--color-text);" readonly />
+            </div>
+        </div>   
+    </div>
+</div>
+{% endblock %}

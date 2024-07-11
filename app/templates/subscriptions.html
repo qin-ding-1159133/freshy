@@ -1,0 +1,71 @@
+{% extends "layouts/base.html" %} {% block title %} Subscriptions {% endblock %}
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<div class="shop">
+  <div
+    class="shop-heading row justify-content-between align-items-center ms-5 me-5"
+  >
+    <h1 class="col-2">Subscriptions</h1>
+  </div>
+
+  <div class="products p-5 mb-5 mt-5 text-center">
+    {% if SubscriptionList%}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for subscription in SubscriptionList %}
+      <div class="col">
+        <div class="card">
+          <div class="card-body text-start">
+            <div class="pro_img">
+              <a href="{{ url_for('product_details', sku=subscription[0]) }}"
+                ><img
+                  class="img-fluid"
+                  src="{{ url_for('static', filename=subscription[4].replace('app/static/', '')) }}"
+              /></a>
+            </div>
+
+            {% if subscription[6] %}
+            <div class="sale">
+              <img src="../static/assets/img/fresh-deal.png" />
+              <h6 class="text-center">{{ subscription[6] }}</h6>
+            </div>
+
+            {% else %} {% endif %}
+            <h2 class="card-title">{{ subscription[1] }}</h2>
+            <div class="row mb-3">
+              {% if subscription[6] %}
+              <p class="card-text text-warning">
+                ${{ '%.2f' | format(subscription[2] * subscription[5]) }}<span
+                  >{{ subscription[3] }} </span
+                ><span
+                  style="
+                    text-decoration-line: line-through;
+                    color: var(--color-grassGreen);
+                  "
+                  >was {{ subscription[2] }}
+                </span>
+              </p>
+              {% else %}
+              <p class="card-text">
+                ${{ subscription[2] }}<span>{{ subscription[3] }}</span>
+              </p>
+              {% endif %}
+              <div class="cart">
+                <a
+                  href="{{ url_for('product_details', sku=subscription[0]) }}"
+                  class="primary-button"
+                  style="width: 100%"
+                  >Subscribe Now</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <p>There are no subscriptions.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

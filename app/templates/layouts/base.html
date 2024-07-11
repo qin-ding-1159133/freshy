@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="description"
+      content=""
+    />
+
+    <title>Fresh Harvest Delivery - {% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap CSS link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="/static/assets/css/App.css"
+      id="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../static/assets/img/favicon.ico"
+    />
+    {% block stylesheets %}{% endblock stylesheets %}
+  </head>
+
+  <body>
+    <header
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 text-uppercase ms-5 me-5"
+    >
+      <ul
+        class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 gap-2"
+      >
+        <li>
+          <a
+            href="/products"
+            class="nav-link px-2"
+            >Shop</a
+          >
+        </li>
+        <li>
+          <a
+            href="/subscriptions"
+            class="nav-link px-2"
+            >Subscriptions</a
+          >
+        </li>
+        <li>
+          <a
+            href="/about"
+            class="nav-link px-2"
+            >About</a
+          >
+        </li>
+      </ul>
+      <div class="col-md-3 mb-2 mb-md-0 text-center">
+        <a
+          href="/home"
+          class="d-inline-flex link-body-emphasis text-decoration-none"
+        >
+          <img
+            src="../static/assets/img/logo.png"
+            style="width: 170px; height: auto"
+          />
+        </a>
+      </div>
+      {% if user_in_session %}
+      <div class="nav-right col-md-3 text-end">
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <!-- Profile button -->
+            <div class="dropdown">
+              <button
+                class="btn"
+                id="profileButton"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <!-- Add the profile icon -->
+                <i
+                  class="bi bi-person-circle me-1"
+                  style="color: #333436; font-size: 1.1rem"
+                ></i>
+              </button>
+              <!-- Dropdown menu -->
+              <ul class="dropdown-menu dropdown-menu-end text-capitalize">
+                <!-- User profile details -->
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% if role == 5 %}{{ url_for('account_holder_dashboard') }}{% elif role == 4 %}{{ url_for('customer_dashboard') }}{% elif role == 3 %}{{ url_for('staff_dashboard') }}{% elif role == 2 %}{{ url_for('manager_dashboard') }}{% elif role == 1 %}{{ url_for('admin_dashboard') }}{% endif %}"
+                  >
+                    <div class="d-flex">
+                      <div class="flex-shrink-0 me-3">
+                        <!-- Placeholder image -->
+                        <div class="avatar avatar-online">
+                          <img
+                            src="{{ url_for('static', filename=user_info[2].replace('app/static/', '')) }}"
+                            alt=""
+                            width="40"
+                            height="40"
+                            style="object-fit: cover"
+                            class="rounded-circle"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="flex-grow"
+                        style="line-height: 10px"
+                      >
+                        <h5 class="d-block">{{ user_info[1] }}</h5>
+                        <span
+                          class="text-muted"
+                          style="font-size: 0.875em"
+                          >{{ user_info[0] }}</span
+                        >
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <div class="dropdown-divider"></div>
+                </li>
+                <!-- Link to user profile -->
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% if role == 5 %}{{ url_for('account_holder_profile') }}{% elif role == 4 %}{{ url_for('customer_profile') }}{% elif role == 3 %}{{ url_for('staff_profile') }}{% elif role == 2 %}{{ url_for('manager_profile') }}{% elif role == 1 %}{{ url_for('admin_profile') }}{% endif %}"
+                    style="font-size: 1.08rem"
+                  >
+                    <i class="bi bi-person me-3"></i>
+                    <span class="align-middle">My Profile</span>
+                  </a>
+                </li>
+                <!-- Logout -->
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('logout') }}"
+                    target="_self"
+                    style="font-size: 1.08rem"
+                  >
+                    <i class="bi bi-box-arrow-left me-3"></i>
+                    <span class="align-middle">Log Out</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-auto">
+            <!-- Cart button -->
+            <button
+              class="btn button-cart text-uppercase"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight"
+              aria-controls="offcanvasRight"
+            >
+              Cart(<span id="cartItemCount">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <!-- Offcanvas for cart -->
+        <div
+          class="offcanvas offcanvas-end"
+          tabindex="-1"
+          id="offcanvasRight"
+          aria-labelledby="offcanvasRightLabel"
+        >
+          <div class="offcanvas-header">
+            <h5
+              class="offcanvas-title"
+              id="offcanvasRightLabel"
+            >
+              Cart
+            </h5>
+
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% if cart %}
+          <div class="offcanvas-body text-start">
+            {% for sku, cart_details in cart.items() %}
+            <div
+              class="cart-prod row mb-4"
+              data-unit-price="{{ cart_details['price'] }}"
+            >
+              <div class="cart-img col-4">
+                <img
+                  src="{{ url_for('static', filename=cart_details['image_url'].replace('app/static/', '')) }}"
+                  height="100"
+                  width="100"
+                  style="border-radius: 5px"
+                />
+              </div>
+              <div class="cart-des col-8">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <a href="#"><h5>{{ cart_details['name'] }}</h5></a>
+                  </div>
+                  <div>
+                    <form
+                      class="remove-from-cart-form"
+                      method="post"
+                      action="{{ url_for('remove_from_cart') }}"
+                    >
+                      <input
+                        type="hidden"
+                        name="sku"
+                        value="{{ sku }}"
+                      />
+                      <button
+                        type="submit"
+                        class="trash-button"
+                        style="border: none; background: none"
+                      >
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <form
+                  class="update_cart_quantity"
+                  method="post"
+                  action="{{ url_for('update_cart_quantity') }}"
+                >
+                  <div
+                    class="cart-quan d-flex justify-content-between text-center mt-4"
+                    data-sku="{{ sku }}"
+                    name="sku"
+                  >
+                    <button
+                      type="button"
+                      class="btn decrement"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="text"
+                      value="{{ cart_details['quantity'] }}"
+                      class="quantity-input text-center"
+                      style="border: none"
+                      name="quantity"
+                      min="1"
+                      max="{{cart_details['stock'] }}"
+                    />
+
+                    <button
+                      type="button"
+                      class="btn increment"
+                    >
+                      +
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <p class="text-end total-price mt-3">
+                ${{ ((cart_details['price'] | float) * (cart_details['quantity']
+                | int)) | round(2) }}
+              </p>
+              <hr />
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="offcanvas-body text-start">Your cart is empty!</div>
+          {% endif %}
+
+          <div class="offcanvas-footer d-flex flex-column p-3">
+            <div class="d-flex justify-content-between">
+              <p>Subtotal</p>
+              <h3 class="subtotal">$0.00</h3>
+            </div>
+            {% if cart %} {% if role == 4 %}
+            <a
+              href="{{ url_for('cus_product_checkout', user_id=user_in_session) }}"
+              ><button style="width: 100%">Checkout</button></a
+            >
+            {% elif role == 5 %}
+            <a
+              href="{{ url_for('acc_product_checkout', user_id=user_in_session) }}"
+              ><button style="width: 100%">Checkout</button></a
+            >
+            {% else %}
+            <button style="width: 100%">Checkout</button>
+            {% endif %} {% else %}
+            <button style="width: 100%">Checkout</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      <div class="nav-right col-md-3 text-end">
+        <!-- Login button -->
+        <button
+          class="btn"
+          id="loginButton"
+          type="button"
+        >
+          <i
+            class="bi bi-person-circle me-4"
+            style="color: #333436; font-size: 1.1rem"
+          ></i>
+        </button>
+        <!-- Cart button -->
+        <button
+          class="btn button-cart text-uppercase"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasRight1"
+          aria-controls="offcanvasRight1"
+        >
+          Cart(<span id="cartItemCount">0</span>)
+        </button>
+        <!-- Offcanvas for cart -->
+        <div
+          class="offcanvas offcanvas-end"
+          tabindex="-1"
+          id="offcanvasRight1"
+          aria-labelledby="offcanvasRight1Label"
+        >
+          <div class="offcanvas-header">
+            <h5
+              class="offcanvas-title"
+              id="offcanvasRight1Label"
+            >
+              Cart(0)
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="offcanvas-body text-start">Your cart is empty!</div>
+
+          <div class="offcanvas-footer d-flex flex-column p-3">
+            <div class="d-flex justify-content-between">
+              <p>Subtotal</p>
+              <h3 class="subtotal">$0.00</h3>
+            </div>
+            <button>Checkout</button>
+          </div>
+        </div>
+
+        <!-- Offcanvas for login -->
+        <div
+          class="offcanvas offcanvas-end"
+          tabindex="-1"
+          id="offcanvasLogin"
+          aria-labelledby="offcanvasLoginLabel"
+        >
+          <div class="offcanvas-header">
+            <h5
+              class="offcanvas-title"
+              id="offcanvasLoginLabel"
+            >
+              Login
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="offcanvas-body">
+            <!-- Display error message if it exists -->
+            {% if alert %}
+            <div class="alert-container">
+              <div
+                class="alert alert-danger"
+                role="alert"
+              >
+                <button
+                  type="button"
+                  class="btn-alert-close"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+                {{ alert }}
+              </div>
+            </div>
+
+            {% endif %}
+
+            <form
+              method="POST"
+              action="/home"
+            >
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  placeholder="Username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                />
+              </div>
+              <div class="text-start">
+                <button
+                  type="submit"
+                  class="mb-5 yellow-black"
+                >
+                  Login
+                </button>
+              </div>
+              <div class="text-start">
+                <p class="mb-0">
+                  Not registered?
+                  <a
+                    class="font-weight-bold login-link"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRegister"
+                    aria-controls="offcanvasRegister"
+                    style="cursor: pointer"
+                    >Create account</a
+                  >
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offcanvas for register-->
+      <div
+        class="offcanvas offcanvas-end"
+        tabindex="-1"
+        id="offcanvasRegister"
+        aria-labelledby="offcanvasRegisterLabel"
+      >
+        <div class="offcanvas-header">
+          <h5
+            class="offcanvas-title"
+            id="offcanvasRegisterLabel"
+          >
+            Register
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="text-center">
+            <a
+              href="{{url_for('member_register')}}"
+              class="mb-3"
+            >
+              <button class="btn yellow-black">Sign Up As A Member</button>
+            </a>
+          </div>
+          <div class="text-center">
+            <a
+              href="{{url_for('account_register')}}"
+              class="mb-3"
+            >
+              <button class="btn yellow-black">
+                Sign Up As An Account Holder
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {% endif %}
+    </header>
+
+    {% block content %}{% endblock content %}
+
+    <div class="footer">
+      <div class="row p-5">
+        <div class="col-6 col-md-3 mb-3">
+          <img
+            src="../static/assets/img/logo.png"
+            alt="logo"
+          />
+        </div>
+        <div class="col-6 col-md-3 mb-3 text-center">
+          <h5 class="text-uppercase mb-3">About</h5>
+          <ul class="flex-column">
+            <li class="nav-item mb-2">
+              <a
+                href="/about"
+                class="nav-link p-0"
+                >About Us
+              </a>
+            </li>
+
+            <li class="nav-item mb-2">
+              <a
+                href="/contact-us"
+                class="nav-link p-0"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3 text-center">
+          <h5 class="text-uppercase mb-3">Links</h5>
+          <ul class="flex-column">
+            <li class="nav-item mb-2">
+              <a
+                href="/products"
+                class="nav-link p-0"
+                >Shop</a
+              >
+            </li>
+            <li class="nav-item mb-2">
+              <a
+                href="/subscriptions"
+                class="nav-link p-0"
+                >Subscriptions
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3 text-center">
+          <h5 class="text-uppercase mb-3">Let's talk shop</h5>
+          <div class="flex-column">
+            <p class="p-0">Questions? Comments?</p>
+
+            <p class="p-0">Email us!</p>
+
+            <div class="mb-2">
+              <a
+                href="mailto:hi@freshharvestdelivery.co.nz"
+                class="p-0"
+                >hi@freshharvestdelivery.co.nz</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript to keep login canvas open if error message exists -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var loginButton = document.getElementById('loginButton')
+        var loginOffcanvas = new bootstrap.Offcanvas(
+          document.getElementById('offcanvasLogin')
+        )
+
+        loginButton.addEventListener('click', function () {
+          loginOffcanvas.show()
+        })
+
+        // Check if error message exists
+        var errorMsg = document.querySelector('.alert-danger')
+        if (errorMsg) {
+          // Show login offcanvas if error message exists
+          loginOffcanvas.show()
+
+          // Add event listener to close button
+          var closeButton = errorMsg.querySelector('.btn-alert-close')
+          closeButton.addEventListener('click', function () {
+            // Remove the error message from the DOM
+            errorMsg.remove()
+          })
+        }
+      })
+    </script>
+    <!-- JavaScript to keep register account canvas open if message exists -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var signupaccountButton = document.getElementById('signupmember')
+        var regaccountOffcanvas = new bootstrap.Offcanvas(
+          document.getElementById('offcanvasRegmember')
+        )
+
+        signupaccountButton.addEventListener('click', function () {
+          regaccountOffcanvas.show()
+        })
+
+        // Check if error message exists
+        var errorMsg1 = document.querySelector('.alert-danger1')
+        if (errorMsg1) {
+          // Show login offcanvas if error message exists
+          regaccountOffcanvas.show()
+
+          // Add event listener to close button
+          var closeButton2 = errorMsg1.querySelector('.btn-alert-close1')
+          closeButton2.addEventListener('click', function () {
+            // Remove the error message from the DOM
+            errorMsg2.remove()
+          })
+        }
+      })
+    </script>
+
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      ;(() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            'submit',
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+
+              form.classList.add('was-validated')
+            },
+            false
+          )
+        })
+      })()
+
+      document.addEventListener('DOMContentLoaded', function () {
+        function updateTotalPrice(element) {
+          const cartProd = element.closest('.cart-prod')
+          const unitPrice = parseFloat(cartProd.getAttribute('data-unit-price'))
+          const quantityInput = cartProd.querySelector('.quantity-input')
+          const maxQuantity =
+            parseInt(quantityInput.getAttribute('max')) || Infinity
+          const quantity = parseInt(quantityInput.value) || 1
+          if (quantity > maxQuantity) {
+            quantity = maxQuantity
+            quantityInput.value = maxQuantity
+          }
+          const totalPriceElement = cartProd.querySelector('.total-price')
+          totalPriceElement.textContent = `$${(unitPrice * quantity).toFixed(
+            2
+          )}`
+
+          updateSubtotal()
+        }
+
+        function updateSubtotal() {
+          let subtotal = 0
+          document.querySelectorAll('.cart-prod').forEach((cartProd) => {
+            const unitPrice = parseFloat(
+              cartProd.getAttribute('data-unit-price')
+            )
+            const quantityInput = cartProd.querySelector('.quantity-input')
+            const quantity = parseInt(quantityInput.value) || 1
+            subtotal += unitPrice * quantity
+          })
+
+          const subtotalElement = document.querySelector('.subtotal')
+          subtotalElement.textContent = `$${subtotal.toFixed(2)}`
+        }
+
+        function updateCartItemCount() {
+          const cartItemCountElement = document.getElementById('cartItemCount')
+          const cartItems = document.querySelectorAll('.cart-prod')
+          cartItemCountElement.textContent = cartItems.length
+        }
+
+        function updateCartQuantity(sku, quantity) {
+          fetch('/update-cart-quantity', {
+            method: 'POST',
+            body: new URLSearchParams({ sku: sku, quantity: quantity }),
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                const input = document.querySelector(
+                  `[data-sku="${sku}"] .quantity-input`
+                )
+
+                updateTotalPrice(input)
+                updateSubtotal()
+                updateCartItemCount()
+              }
+            })
+            .catch((error) => console.error('Error:', error))
+        }
+
+        document.body.addEventListener('click', function (event) {
+          if (event.target.classList.contains('increment')) {
+            const input = event.target.previousElementSibling
+            let value = parseInt(input.value) || 1
+
+            const max = parseInt(input.getAttribute('max')) || Infinity
+            if (value < max) {
+              input.value = value + 1
+              updateTotalPrice(event.target)
+              updateCartItemCount()
+              const cartProd = input.closest('.cart-quan')
+              const sku = cartProd.getAttribute('data-sku')
+              updateCartQuantity(sku, input.value)
+            }
+          } else if (event.target.classList.contains('decrement')) {
+            const input = event.target.nextElementSibling
+            let value = parseInt(input.value) || 1
+            if (value > 1) {
+              input.value = value - 1
+              updateTotalPrice(event.target)
+              updateCartItemCount()
+              const cartProd = input.closest('.cart-quan')
+              const sku = cartProd.getAttribute('data-sku')
+              updateCartQuantity(sku, input.value)
+            }
+          } else if (event.target.closest('.trash-button')) {
+            const form = event.target.closest('.remove-from-cart-form')
+            const sku = form.querySelector('input[name="sku"]').value
+
+            fetch('/remove-from-cart', {
+              method: 'POST',
+              body: new URLSearchParams({ sku: sku }),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  const cartProd = form.closest('.cart-prod')
+                  cartProd.remove()
+                  updateSubtotal()
+                  updateCartItemCount()
+                }
+              })
+              .catch((error) => console.error('Error:', error))
+          }
+        })
+
+        document.body.addEventListener('click', function (event) {
+          if (event.target.closest('.trash-button')) {
+            event.preventDefault() // Prevent form submission
+            const form = event.target.closest('.remove-from-cart-form')
+            const sku = form.querySelector('input[name="sku"]').value
+
+            fetch('/remove-from-cart', {
+              method: 'POST',
+              body: new URLSearchParams({ sku: sku }),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  const cartProd = form.closest('.cart-prod')
+                  cartProd.remove()
+                  updateSubtotal()
+                  updateCartItemCount()
+                }
+              })
+              .catch((error) => console.error('Error:', error))
+          }
+        })
+
+        document.body.addEventListener('input', function (event) {
+          if (event.target.classList.contains('quantity-input')) {
+            let value = parseInt(event.target.value)
+            const max = parseInt(event.target.getAttribute('max')) || Infinity
+            if (isNaN(value) || value < 1) {
+              event.target.value = 1
+            } else if (value > max) {
+              event.target.value = max
+            }
+            updateTotalPrice(event.target)
+            const cartProd = event.target.closest('.cart-quan')
+            const sku = cartProd.getAttribute('data-sku')
+            updateCartQuantity(sku, event.target.value)
+          }
+        })
+
+        document.querySelectorAll('.add-to-cart-button').forEach((button) => {
+          button.addEventListener('click', function () {
+            const sku = this.getAttribute('data-sku')
+            fetch('/add-to-cart', {
+              method: 'POST',
+              body: new URLSearchParams({ sku: sku }),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  updateCart()
+                  updateCartItemCount()
+                  location.reload()
+                }
+              })
+              .catch((error) => console.error('Error:', error))
+          })
+        })
+
+        function updateCart() {
+          fetch('/cart-contents')
+            .then((response) => response.text())
+            .then((html) => {
+              document.querySelector('.offcanvas-body').innerHTML = html
+              updateSubtotal()
+              updateCartItemCount()
+            })
+        }
+
+        updateSubtotal()
+        updateCartItemCount()
+      })
+    </script>
+  </body>
+</html>

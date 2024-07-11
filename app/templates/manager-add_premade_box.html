@@ -1,0 +1,409 @@
+{% extends "layouts/manager.html" %} {% block title %} {% endblock %} {% block
+stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    <span class="text-muted fw-light"
+      >Manage Products /
+      <a
+        href="{{ url_for('manager_premade_box_list') }}"
+        class="text-muted fw-light"
+        style="text-decoration: none"
+        >Premade Box List</a
+      >
+      /</span
+    >
+
+    Add Premade Box
+  </h4>
+
+  <div class="card mb-4 p-5">
+    <form
+      action="/manager/products/add-premade-box"
+      method="POST"
+      class="form needs-validation"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <!--list profile-->
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box ID:</h6></label>
+          <input
+            class="form-control"
+            id="new_product_id"
+            name="new_product_id"
+            value="{{new_product_id}}"
+            style="font-family: var(--color-text); background-color: #f5f5f5"
+            readonly
+          />
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box Category:</h6></label>
+          <input
+            class="form-control"
+            id="product_category_id"
+            name="product_category_id"
+            value="Premade Box"
+            style="font-family: var(--color-text); background-color: #f5f5f5"
+            readonly
+          />
+         
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box Name:</h6></label>
+          <input
+            class="form-control"
+            id="product_name"
+            name="product_name"
+            placeholder="Product Name"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="The premade box name must be less than 50 characters long"
+            required
+            maxlength="50"
+          />
+          <div class="invalid-feedback">
+            Please enter a premade box name (up to 50 characters)
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>SKU:</h6></label>
+          <input
+            class="form-control"
+            type="text"
+            name="sku"
+            id="sku"
+            placeholder="SKU"
+            style="font-family: var(--color-text)"
+            pattern="^[A-Za-z0-9]+$"
+            title="Please enter a valid SKU (letters and numbers only without space)"
+            required
+          />
+
+          <div class="invalid-feedback">
+            Please enter a valid SKU (letters and numbers only without space)
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box unit:</h6></label>
+          <select
+            class="form-control"
+            name="unit"
+            id="unit"
+            style="font-family: var(--color-text)"
+            required
+          >
+            <option
+              value="7"
+              selected
+            >
+              Small
+            </option>
+            <option value="8">Medium</option>
+            <option value="9">Large</option>
+          </select>
+          <div class="invalid-feedback">
+            Please enter a valid product unit (letters and numbers only)
+          </div>
+        </div>
+
+        <div class="mt-5 col-md-6">
+          <label class="fw-bold"><h6>Upload Image:</h6></label>
+          <input
+            type="file"
+            id="image1"
+            name="image1"
+            accept="image/*"
+            style="font-family: var(--color-text)"
+            multiple
+          />
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box Price (NZ$):</h6></label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            id="product_price"
+            name="product_price"
+            placeholder="0.00"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="Please enter a premade box price (minimum value is 1)"
+            required
+            min="1"
+          />
+          <div class="invalid-feedback">Please enter a premade box price (minimum value is 1)</div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Stock Quantity:</h6></label>
+          <input
+            type="number"
+            step="1"
+            class="form-control"
+            id="stock_quantity"
+            name="stock_quantity"
+            placeholder="0.00"
+            size="10"
+            style="font-family: var(--color-text)"
+            title="Please enter a stock quantity with two decimal places"
+            required
+            min="1"
+          />
+          <div class="invalid-feedback">
+            Please enter a stock quantity (minimum value is 1)
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Premade Box Promotion Type:</h6></label>
+          <div>
+            <select
+              class="selectpart1 form-control"
+              id="promotion_type_id"
+              name="promotion_type_id"
+              style="
+                width: 100%;
+                height: 38px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+              "
+              required
+            >
+              {% for promotion in promotion_type %}
+              <option value="{{promotion[0]}}">{{promotion[1]}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Product Origins:</h6></label>
+          <div>
+            <select
+              class="selectpart1 form-control"
+              id="product_origins"
+              name="product_origins"
+              style="
+                width: 100%;
+                height: 38px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+              "
+              required
+            >
+              <option value="Product of New Zealand">
+                Product of New Zealand
+              </option>
+              <option value="Product of Overseas">Product of Overseas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Choose Start Time:</h6></label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="start_time"
+            name="start_time"
+            required
+          />
+          <div class="invalid-feedback">Please enter the start time.</div>
+        </div>
+
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Choose End Time:</h6></label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="end_time"
+            name="end_time"
+            required
+          />
+          <div class="invalid-feedback">Please enter the end time.</div>
+        </div>
+
+       <div class="mb-3 col-md-6">
+          <label class="fw-bold"><h6>Product Item:</h6></label>
+          <div class="row" id="product-item-container">
+              <div class="col mb-2">
+                  <select
+                      class="selectpart1 form-control"
+                      id="depot_id"
+                      name="depot_id"
+                      style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"
+                      required
+                  >
+                      <option value="">Select Depot</option>
+                      {% for depot in depot_info %}
+                      <option value="{{ depot[0] }}" {% if selected_depot == depot[0] %}selected{% endif %}>{{ depot[1] }}</option>
+                      {% endfor %}
+                 
+                  </select>
+              </div>
+              <div class="product-item mb-2">
+                  <div class="row">
+                      <div class="col">
+                          <select
+                              class="selectpart1 form-control pro_id"
+                              name="pro_id[]"
+                              style="width: 100%;"
+                              required
+                          >
+                              <option value="">Select Product</option>
+                              {% for pro in pro_list %}
+                              <option value="{{ pro[0] }}" {% if selected_product == pro[0] %}selected{% endif %}>
+                                  {{ pro[1] }} ({{ pro[2] }})
+                              </option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col">
+                          <input
+                              type="number"
+                              step="1"
+                              class="form-control quantity"
+                              name="quantity[]"
+                              placeholder="Quantity"
+                              style="font-family: var(--color-text)"
+                              required
+                              min="0"
+                          />
+                      </div>
+                  </div>
+              </div>
+          </div>
+       </div>
+
+       <div class="row col-md-6 mt-5">
+        <div class="add-item col" style="width: 30%;"><a class="btn " onclick="duplicateProductItem()">
+        Add item
+      </a>
+       </div>
+    </div>
+      
+
+  
+        <input
+          type="hidden"
+          id="depot_id"
+          name="depot_id"
+          value="{{depot_id}}"
+        />
+
+        {% if msg %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+        </div>
+        {% endif %}
+        
+        </div>
+        <div class="mt-5">
+          <button
+            type="submit"
+            id="settings-button"
+          >
+            Schedule Premade Box
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  ;(() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        'submit',
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        },
+        false
+      )
+    })
+  })()
+
+
+  $(document).ready(function() {
+    // Handle depot change to fetch products
+    $('#depot_id').change(function() {
+        var depotId = $(this).val();
+        $.ajax({
+            url: '/manager/get-products',
+            type: 'GET',
+            data: { depot_id: depotId },
+            success: function(data) {
+                $('.pro_id').empty();
+                $('.pro_id').append($('<option>').val('').text('Select Product'));
+                $.each(data.products, function(index, product) {
+                    $('.pro_id').append($('<option>').val(product.id).text(product.name));
+                });
+            }
+        });
+    });
+
+    // Handle product change to fetch quantity
+    $('#product-item-container').on('change', '.pro_id', function() {
+        var productId = $(this).val();
+        var quantityInput = $(this).closest('.product-item').find('.quantity');
+        $.ajax({
+            url: '/manager/get-product-quantity',
+            type: 'GET',
+            data: { product_id: productId },
+            success: function(data) {
+                quantityInput.attr('max', data.quantity);
+                quantityInput.val(data.quantity);
+            }
+        });
+    });
+});
+
+// Function to duplicate product item
+function duplicateProductItem() {
+    let container = document.getElementById('product-item-container');
+    let clone = container.querySelector('.product-item').cloneNode(true);
+
+    // Clear the selected values in the cloned container
+    let selects = clone.querySelectorAll('select');
+    selects.forEach(select => {
+        select.selectedIndex = 0;
+    });
+
+    // Clear the quantity input value and max attribute in the cloned container
+    let quantityInput = clone.querySelector('input[type="number"]');
+    quantityInput.value = '';
+    quantityInput.removeAttribute('max');
+
+    // Append the cloned container to the parent element
+    container.appendChild(clone);
+}
+
+</script>
+
+{% endblock content %}

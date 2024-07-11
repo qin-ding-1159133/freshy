@@ -1,0 +1,290 @@
+{% extends "layouts/base-fullscreen.html" %} {% block title %} Checkout {%
+endblock %} {% block stylesheets %}{% endblock stylesheets %} {% block content
+%}
+<div class="container checkout">
+  <div class="row g-5">
+    <div class="col-md-5 col-lg-4 order-md-last">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span>Your cart</span>
+        <span class="badge text-bg-warning rounded-pill"></span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <div>
+            <h6 class="my-0">{{product_info[7]}} </h6>
+            <small class="text-body-secondary">QTY:{{quantity}}</small>
+            <small class="text-body-secondary">Subscription:{{sub_type}}</small>
+
+          </div>
+          <span class="text-body-secondary">${{current_price}}</span>
+        </li>
+
+
+        <li
+          class="list-group-item d-flex justify-content-between bg-body-tertiary"
+        >
+          <div class="text-success">
+            <h6 class="my-0">Shippment</h6>
+            <small></small>
+          </div>
+          <span class="text-success">${{ship_cost[0]}}</span>
+        </li>
+
+           <li
+            class="list-group-item bg-body-tertiary deducted"
+            style="display: none"
+          >
+            <div class="text-success">
+              <h6 class="my-0">Deducted</h6>
+            </div>
+            <span class="text-success deducted-amount">-$0.00</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <h6>Total in NZD (Including GST)</h6>
+            <strong
+              class="total"
+              name="total"
+              >$0.00</strong
+            >
+          </li>
+      </ul>
+
+      <form       
+      class="d-flex gap-3"
+      method="post"
+      action="/checkout/usecoupon">
+      <input name="current" value="{{current_price}}" hidden>
+      <input name="sku1" value="{{sku1}}" hidden>
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            name="couponcode"
+            placeholder="Coupon code"
+          />
+          <button
+            type="submit"
+            class="primary-button"
+            style="height: 60px; padding: 5px 18px"
+          >
+            Redeem
+          </button>
+        </div>
+      </form>
+
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between p-3">
+          <div class="form-check form-switch">
+            <label
+              class="form-check-label"
+              for="flexSwitchCheckDefault"
+              style="font-family: var(----font-text)"
+              >Pay with the balance</label
+            >
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckDefault"
+            />
+          </div>
+          <div>
+            <h6>
+              Balance: <strong class="balance">${{ balance[0] }}</strong>
+            </h6>
+          </div>
+        </li>
+      </ul>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">You need to pay </h6>
+            </div>
+            <span class="text-body-secondary">${{updated_price}}</span>
+          </li>
+        </ul>
+    </div>
+    <div class="col-md-7 col-lg-8 mb-3">
+      <form
+        class="needs-validation"
+        novalidate=""
+      >
+
+
+        <hr class="my-4" />
+
+
+
+        <hr class="my-4" />
+
+        <h4 class="mb-3">Payment Method</h4>
+
+        <div class="row gy-3">
+          <div class="col-md-6">
+            <label
+              for="cc-name"
+              class="form-label"
+              >Name on card</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="cc-name"
+              placeholder=""
+              required=""
+            />
+            <small class="text-body-secondary"
+              >Full name as displayed on card</small
+            >
+            <div class="invalid-feedback">Name on card is required</div>
+          </div>
+
+          <div class="col-md-6">
+            <label
+              for="cc-number"
+              class="form-label"
+              >Credit card number</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="cc-number"
+              placeholder=""
+              required=""
+            />
+            <div class="invalid-feedback">Credit card number is required</div>
+          </div>
+
+          <div class="col-md-6">
+            <label
+              for="cc-expiration"
+              class="form-label"
+              >Expiration</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="cc-expiration"
+              placeholder=""
+              required=""
+            />
+            <div class="invalid-feedback">Expiration date required</div>
+          </div>
+
+          <div class="col-md-6">
+            <label
+              for="cc-cvv"
+              class="form-label"
+              >CVV</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="cc-cvv"
+              placeholder=""
+              required=""
+            />
+            <div class="invalid-feedback">Security code required</div>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <button
+          class="primary-button btn-lg"
+          type="submit"
+          style="height: 60px"
+        >
+          Continue to checkout
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sameAddressRadio = document.getElementById('same-address')
+    const differentAddressRadio = document.getElementById('different-address')
+    const shippingAddressForm = document.getElementById('billing-address-form')
+
+    sameAddressRadio.addEventListener('change', function () {
+      if (sameAddressRadio.checked) {
+        shippingAddressForm.classList.add('hidden')
+      }
+    })
+
+    differentAddressRadio.addEventListener('change', function () {
+      if (differentAddressRadio.checked) {
+        shippingAddressForm.classList.remove('hidden')
+      }
+    })
+  })
+</script>
+#redeem
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let initialBalance = parseFloat(
+      document.querySelector('.balance').textContent.replace('$', '')
+    )
+
+    function updateTotals() {
+      let subtotal = 0
+      document.querySelectorAll('.cart-prod').forEach(function (item) {
+        const price = parseFloat(
+          item.querySelector('.prod-price').getAttribute('data-price')
+        )
+        subtotal += price
+      })
+
+      const shippingCost = parseFloat(
+        document.querySelector('.shipping-cost').getAttribute('data-shipping')
+      )
+      let total = subtotal + shippingCost
+      let deductedAmount = 0
+
+      const payWithBalance = document.querySelector(
+        '#flexSwitchCheckDefault'
+      ).checked
+
+      if (payWithBalance) {
+        if (initialBalance >= total) {
+          deductedAmount = total
+          total = 0
+        } else {
+          deductedAmount = initialBalance
+          total -= initialBalance
+        }
+        document.querySelector('.deducted').style.display = 'flex'
+        document.querySelector('.deducted').style.justifyContent =
+          'space-between'
+        document.querySelector(
+          '.deducted-amount'
+        ).textContent = `-$${deductedAmount.toFixed(2)}`
+      } else {
+        document.querySelector('.deducted').style.display = 'none'
+        deductedAmount = 0 // Reset deducted amount
+      }
+
+      const newBalance = initialBalance - deductedAmount
+      document.querySelector('.balance').textContent = `$${newBalance.toFixed(
+        2
+      )}`
+      document.querySelector('.subtotal').textContent = `$${subtotal.toFixed(
+        2
+      )}`
+      document.querySelector('.total').textContent = `$${total.toFixed(2)}`
+    }
+
+    document
+      .querySelector('#flexSwitchCheckDefault')
+      .addEventListener('change', function () {
+        updateTotals()
+      })
+
+    // Initial call to update totals
+    updateTotals()
+  })
+</script>
+{% endblock content %}

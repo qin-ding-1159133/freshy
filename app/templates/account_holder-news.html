@@ -1,0 +1,100 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Account Holder News {% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="mb-4">
+            News List
+        </h4>
+        <div class="card mb-4 p-5">
+            {% if msg %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+            </div>
+            {% endif %}
+            <div class="d-flex justify-content-between mb-4 mt-3">
+                <div>
+                    <form method="POST" class="d-flex gap-3" action="/account-holder/news" id="searchForm">
+                        <label>
+                            <input type="search" id="searchinput" name="searchinput" class="form-control" placeholder="Search Title" aria-controls="DataTables_Table_0" style="height: 45px;" value="{{ searchinput }}"/>
+                        </label>
+                        <button type="submit"><i class="bi bi-search me-2"></i>Search</button>
+                    </form>
+                </div>
+                <form method="POST" class="d-flex gap-3" action="/account-holder/news">
+                    <div class="d-flex gap-3 filter">
+                        <select name="order" id="order" class="form-select text-capitalize" style="height: 45px;" onchange="this.form.submit()">
+                            <option value="DESC" {% if order=='DESC' %}selected{% endif %}>Date Descending</option>
+                            <option value="ASC" {% if order=='ASC' %}selected{% endif %}>Date Ascending</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="d-flex">
+                    <a href="{{ url_for('account_holder_news') }}">
+                        <button class="btn">Show All</button>
+                    </a>
+                </div>
+            </div>            
+
+            <!-- News Cards -->
+            <div class="row gy-4">
+                {% if news_list %}
+                {% for news in news_list %}
+                <div class="col-md-4">
+                    <div class="card h-100 d-flex flex-column">
+                        {% if news[4] %}
+                        <img src="{{ url_for('static', filename=news[4].replace('app/static/', '')) }}" alt="{{ news[2] }}">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ news[2] }}</h5>
+                            <p class="card-text flex-grow-1">{{ news[3][:50] }}{% if news[3]|length > 50 %}...{% endif %}</p> <!-- Summary of news content with max 50 words -->
+                            <div class="row g-3 mt-auto">
+                                <div class="col-6">
+                                    <div class="d-flex">
+                                        <div class="avatar flex-shrink-0 me-2">
+                                            <span class="avatar-initial rounded" style="font-size: 1.3rem; margin-top: -20px;"><i class="bi bi-calendar-week"></i></span>
+                                        </div>
+                                        <div>
+                                            <h6 class="small mb-0 text-nowrap">{{ news[5].strftime("%d %b %y") }}</h6>
+                                            <p><small>Publish Date</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="check-details mt-auto d-flex justify-content-center">
+                                <a href="{{ url_for('account_holder_news_details', news_id=news[0]) }} " class="primary-button" style="width: 100%" onmouseover="this.style.color='var(--color-white)'" onmouseout="this.style.color='var(--color-text)'">Check Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>No news found matching the search criteria.</strong><br><br> Please try refining your search terms or <a href="{{ url_for('account_holder_news') }}" class="alert-link">view all news</a>.
+                    </div>
+                </div>
+                {% endif %}
+            </div>   
+        </div>    
+    </div>
+    <script>
+        // Function to handle search input change
+        function handleSearchInputChange() {
+            var searchInputValue = document.getElementById('searchinput').value.trim();
+            if (searchInputValue === '') {
+                submitFormWithEmptySearchInput();
+            }
+        }
+    
+        // Function to handle form submission with empty search input
+        function submitFormWithEmptySearchInput() {
+            document.getElementById('searchinput').name = ''; // Remove the search input name attribute
+            document.getElementById('searchForm').submit(); // Submit the form
+        }
+    
+        // Event listener to detect changes in the search input
+        document.getElementById('searchinput').addEventListener('input', handleSearchInputChange);
+    </script>
+{% endblock %}

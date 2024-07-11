@@ -1,0 +1,285 @@
+{% extends "layouts/manager.html" %} {% block title %} {% endblock %} {% block stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %} 
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <!--shane temp starts-->
+        
+          <h4 class="mb-4">
+            <span class="text-muted fw-light">Manage Accounts / <a href="{{ url_for('manager_stafflist') }}" class="text-muted fw-light" style="text-decoration: none;">Staff List</a> /</span>
+
+            Add Staff
+          </h4>
+
+          <div class="card mb-4 p-5">
+            <form
+              action="/manager/addstaff"
+              method="POST"
+              class="form needs-validation"
+              enctype="multipart/form-data"
+              novalidate
+            >
+              <!--list profile-->
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Staff ID:</h6></label>
+                  <input
+                    class="form-control"
+                    id="new_staff_id"
+                    name="new_staff_id"
+                    value="{{new_staff_id}}"
+                    style="font-family: var(--color-text); background-color: #f5f5f5;"
+                    readonly
+                  />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Username:</h6></label>
+                  <input
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    size="10"
+                    style="font-family: var(--color-text);"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter the username
+                  </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Password:</h6></label>
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="password1"
+                    id="password1"
+                    placeholder="Password"
+                    aria-label="Password"
+                    aria-describedby="basic-addon1"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    style="font-family: var(--color-text);"
+                    required
+                  />
+                  
+                  <div class="invalid-feedback">
+                    Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
+                  </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Please confirm the password:</h6></label>
+                    <input
+                      class="form-control"
+                      type="password"
+                      name="password2"
+                      id="password2"
+                      placeholder="Confirm Password"
+                      aria-label="Password"
+                      aria-describedby="basic-addon1"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Title:</h6></label>
+                    <select
+                class="selectpart1 mb-2"
+                id="title"
+                name="title"
+                style="
+                  height: 50px;
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  border: 1px solid #dee2e6;
+                  font-size: 1.2rem;
+                  font-family: var(--color-text);
+                  color: #6d6d6d;
+                  width: 319px;
+                "
+              >
+  
+                <option value="Mr.">
+                  Mr.
+                </option>
+                <option value="Ms.">
+                  Ms.
+                </option>
+                <option value="Miss.">
+                  Miss.
+                </option>
+                <option value="Mrs.">
+                  Mrs.
+                </option>
+                <option value="Dr.">
+                  Dr.
+                </option>
+              </select>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>First Name:</h6></label>
+                    <input
+                      class="form-control"
+                      id="first_name"
+                      name="first_name"
+                      placeholder="First Name"
+                      size="10"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter the First Name
+                    </div>
+                  </div>
+  
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Family Name:</h6></label>
+                    <input
+                      class="form-control"
+                      id="family_name"
+                      name="family_name"
+                      placeholder="Family Name"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    
+                    <div class="invalid-feedback">
+                      Please enter the Family Name
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Phone:</h6></label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      placeholder="Phone Number"
+                      min="0"
+                      step="1"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    
+                    <div class="invalid-feedback">
+                      Please enter the Phone Number
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Email:</h6></label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      placeholder="Email Address"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    
+                    <div class="invalid-feedback">
+                      Please enter a valid Email Address
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Responsibility:</h6></label>
+                    <div><select class="selectpart1 form-control" id="responsibility" name="responsibility1" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option  selected value="{{resp_list[1][0]}}">{{resp_list[1][1]}}</option>
+                      <option   value="{{resp_list[2][0]}}">{{resp_list[2][1]}}</option>
+                     </select></div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Status:</h6></label>
+                    <div><select class="selectpart1 form-control" id="status" name="status" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option  selected value="Active">Active</option>
+                      <option value="Inctive">Inactive</option>
+                     </select></div>
+                  </div>
+
+          
+
+                <div class="mt-5 col-md-6">
+                  <label class="fw-bold"><h6>Upload Image:</h6></label>
+                  <input
+                    type="file"
+                    id="image1"
+                    name="image1"
+                    accept="image/*"
+                    style="font-family: var(--color-text);"
+                    multiple
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Depot:</h6></label>
+                  <input
+                    class="form-control"
+                    id="depot"
+                    name="depot"
+                    value="{{depot_info[1]}}"
+                    style="font-family: var(--color-text); background-color: #f5f5f5;"
+                    readonly
+                  />
+  
+                  {% if msg %}
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      {{ msg }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+                  </div>
+                  {% endif %}
+
+                <div class="mt-2">
+                  <button
+                    type="submit"
+                    id="settings-button"
+                  >
+                    Submit
+                  </button>
+
+                </div>
+              </div>
+            </form>
+          </div>
+       
+      
+    </div>
+    
+    <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+    event.preventDefault()
+    event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+    }, false)
+    })
+    })()
+    </script>
+
+
+   
+  {% endblock content %}
+
+

@@ -1,0 +1,64 @@
+<div class="cart-items">
+  <div
+    class="cart-prod row mb-4"
+    data-unit-price="{{ cart_details.price }}"
+  >
+    <div class="cart-img col-4">
+      <img
+        src="{{ cart_details.image_url }}"
+        height="100"
+        width="100"
+        style="border-radius: 5px"
+      />
+    </div>
+    <div class="cart-des col-8">
+      <div class="d-flex justify-content-between">
+        <div>
+          <a href="#">
+            <h5
+              style="
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+              "
+            >
+              {{ cart_details.name }}
+            </h5>
+          </a>
+        </div>
+        <div>
+          <a
+            href="#"
+            class="trash-button"
+            data-product-id="{{ cart_details.sku }}"
+          >
+            <i class="bi bi-trash3"></i>
+          </a>
+        </div>
+      </div>
+      <div class="cart-quan d-flex justify-content-between text-center mt-4">
+        <button
+          type="button"
+          class="btn decrement"
+        >
+          -
+        </button>
+        <input
+          type="text"
+          value="1"
+          class="quantity-input text-center"
+          style="border: none"
+        />
+        <button
+          type="button"
+          class="btn increment"
+        >
+          +
+        </button>
+      </div>
+    </div>
+    <p class="text-end total-price mt-3">${{ cart_details.price }}</p>
+    <hr />
+  </div>
+</div>

@@ -1,0 +1,234 @@
+{% extends "layouts/manager.html" %} {% block title %} {% endblock %} {% block stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %} 
+    <div class="container-xxl flex-grow-1 container-p-y">
+       
+        
+          <h4 class="mb-4">
+            <span class="text-muted fw-light">Manage application / <a href="{{ url_for('manager_application_list') }}" class="text-muted fw-light" style="text-decoration: none;">Application List</a> /</span> 
+
+            View Application
+          </h4>
+
+          <div class="card mb-4 p-5">
+            <form
+              action="/manager/application/{{application[0]}}"
+              class="form needs-validation"
+              action="post"
+            >
+              <!--list profile-->
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Application ID:</h6></label>
+                  <input
+                    class="form-control"
+                    id="application_id"
+                    name="application_id"
+                    value="{{application[0]}}"
+                    style="font-family: var(--color-text); background-color: #f5f5f5;"
+                    readonly
+                  />
+                </div>
+
+
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Account Name:</h6></label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="account_name"
+                    id="account_name"
+                    placeholder="Coupon code"
+
+                    value="{{application[6]}}"
+                    readonly
+                  />
+                  
+
+                </div>
+
+    
+ 
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Credit value (NZ$): </h6></label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      id="credit_value"
+                      name="credit_value"
+                      placeholder="0.00"
+                      size="10"
+                      style="font-family: var(--color-text);"
+                      
+                      value="{{application[1]}}"
+                       readonly
+                      min="0"
+                    />
+
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Status:</h6></label>
+                    <input
+                
+                      class="form-control"
+                      id="location"
+                      value="{{application[3]}}"
+                       readonly
+                    />
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Support Doc </h6></label>
+                      <img
+                        src="{{ url_for('static', filename=application[2].replace('app/static/', '')) }}"
+                        alt="user image"
+                        class="d-block ms-0 ms-sm-4 rounded user-profile-img"
+                        style="border-color: #fff"
+                      />
+
+                  </div>
+  
+                <div style="background-color: rgb(240, 215, 183);background-size: 10px;">{{ msg }}</div>
+                <div class="mt-2">
+                  <button
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#myModalapprove_{{application[0]}}"
+                  >
+                    Approve
+                  </button>
+                <!-- The Modal -->
+                <div
+                class="modal"
+                id="myModalapprove_{{application[0]}}"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Approval</h4>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                      ></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      Are you sure to approve it?
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button
+                      type="submit"
+                      id="settings-button"
+                      href="{{url_for('manager_application_details',application_id1=application[0])}}"
+                       method="post"
+                    > Yes </button>
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--modal ends-->                    
+
+                  <button
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#myModalreject_{{application[0]}}"
+                  >
+                    Reject
+                  </button>
+                  <!-- The Modal -->
+
+                <div
+                class="modal"
+                id="myModalreject_{{application[0]}}"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Decline</h4>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                      ></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      Are you sure to reject it?
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <a
+                      href="{{url_for('manager_application_reject',application_id1=application[0])}}"
+
+                        class="btn fs-6 btn-success glow"
+                        >Yes</a
+                      >
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--modal ends-->              
+        
+
+                </div>
+              </div>
+          </div>
+        </form>
+
+      
+    </div>
+    
+    <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+    event.preventDefault()
+    event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+    }, false)
+    })
+    })()
+    </script>
+
+
+   
+  {% endblock content %}
+
+

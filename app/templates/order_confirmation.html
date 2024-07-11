@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %} {% block title %} Order Confirmation {%
+endblock %} {% block stylesheets %}{% endblock stylesheets %} {% block content
+%}
+<div class="container text-center p-5 mb-5">
+  <i
+    class="bi bi-check-circle-fill"
+    style="font-size: 8rem; color: var(--color-grassGreen)"
+  ></i>
+  <h1>Thank you for your purchase!</h1>
+  <h4>
+    We are pleased to confirm your order
+    <strong>#{{ order_id[0] }}</strong> placed on
+    <strong>{{ order_date.strftime('%d-%m-%Y') }}</strong>.
+  </h4>
+  <div>
+    <h6>
+      If you have any questions about your order, feel free to contact our
+      customer service team at
+      <a href="mailto:hi@freshharvestdelivery.co.nz"
+        >[Customer Service Email]</a
+      >
+    </h6>
+  </div>
+
+  <a href="/home"
+    ><button class="primary-button mt-5">Continue Shopping</button></a
+  >
+</div>
+{% endblock content %}

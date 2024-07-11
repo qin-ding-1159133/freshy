@@ -1,0 +1,93 @@
+{% extends "layouts/admin.html" %}
+{% block title %} Admin Incoming Order Details {% endblock %}
+{% block stylesheets %}{{ super() }}
+<link href="{{ url_for('static', filename='assets/css/Dashboard.css') }}" rel="stylesheet"/>
+{% endblock stylesheets %}
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="mb-4">
+            <span class="text-muted fw-light">Manage Orders / <a href="{{ url_for('admin_order_incoming') }}" class="text-muted fw-light" style="text-decoration: none;">Order List</a> /</span> Order Details
+        </h4>
+        <div class="card mb-4 p-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-unstyled mb-4 mt-3">
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-calendar mb-1"></i>
+                                    <span class="fw-medium mx-2">Order Date:</span>
+                                    <span>{{ theorder[1].strftime('%d-%m-%Y') }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-list-ol mb-1"></i>
+                                    <span class="fw-medium mx-2">Order Number:</span>
+                                    <span>{{ theorder[0] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-cash-stack mb-1"></i>
+                                    <span class="fw-medium mx-2">Total Amount:</span>
+                                    <span>NZD ${{ theorder[7] }} (GST inclusive)</span>
+                                </li>
+                                <hr>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-box-seam mb-1"></i>
+                                    <span class="fw-medium mx-2">Customer Name:</span>
+                                    <span>{{ theorder[3]}} {{theorder[4] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-box-seam mb-1"></i>
+                                    <span class="fw-medium mx-2">Customer Address:</span>
+                                    <span>{{ theorder[5] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-box-seam mb-1"></i>
+                                    <span class="fw-medium mx-2">Customer Phone Number:</span>
+                                    <span>{{ theorder[6] }}</span>
+                                </li>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-box-seam mb-1"></i>
+                                    <span class="fw-medium mx-2">Customer Email:</span>
+                                    <span>{{ theorder[7] }}</span>
+                                </li>
+                                <hr>
+                                <h5 class="mb-4">Products</h5>
+                                <ul class="list-unstyled mb-4 mt-3">
+                                    {% for line in order_lines %}
+                                    <li class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-box-seam mb-1"></i>
+                                        <span class="fw-medium mx-2">Product Name:</span>
+                                        <span>{{ line[0] }}</span>
+                                    </li>
+                                    <li class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-currency-dollar mb-1"></i>
+                                        <span class="fw-medium mx-2">Product Price:</span>
+                                        <span>NZD ${{ line[1] }}</span>
+                                    </li>
+                                    <li class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-cart4 mb-1"></i>
+                                        <span class="fw-medium mx-2">Product Quantity:</span>
+                                        <span>{{ line[2] }}</span>
+                                    </li>
+                                    <hr>
+                                    {% endfor %}
+                                </ul>
+                                <li class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-truck mb-1"></i>
+                                    <span class="fw-medium mx-2">Order Status:</span>
+                                </li>
+                                {% for status in order_statuses %}
+                                <li class="d-flex align-items-center mb-3">
+                                    <span class="fw-medium mx-2 {% if theorder[2] == status['name'] %}status-green{% else %}status-grey{% endif %}">
+                                        {{ status['name'] }}
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

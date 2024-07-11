@@ -1,0 +1,59 @@
+{% extends "layouts/manager.html" %}
+
+{% block title %} Manage Credit Limit {% endblock %}
+
+{% block stylesheets %}
+{{ super() }}
+<link href="{{ url_for('static', filename='assets/css/Dashboard.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Manage Account / <a href="{{ url_for('manager_account_list') }}" class="text-muted fw-light" style="text-decoration: none;">Account Holder List</a> / <a href="/manager/accountlist/profile?account_holder_id={{ profile[0] }}" class="text-muted fw-light" style="text-decoration: none;">{{ account_info[2] }}</a> / </span>Update Credit Limit        
+    </h4>
+    {% if error_msg %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ error_msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+    </div>
+    {% endif %}
+    <div class="card mb-4 p-5">
+        <form action="{{ url_for('manager_manage_credit_limit') }}" method="post">
+            
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold">
+                        <h6>Account Holder:</h6>
+                    </label>
+                    <input class="form-control" id="user_name" name="user_name" value="{{ account_info[2] }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold">
+                        <h6>Current Credit Limit:</h6>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">NZ$</span>
+                        <input class="form-control" id="current_credit_limit" name="current_credit_limit" value="{{ account_info[8] }}" style="font-family: var(--color-text); background-color: #f5f5f5;" readonly />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold">
+                        <h6>New Credit Limit:</h6>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">NZ$</span>
+                        <input type="number" id="new_credit_limit" name="new_credit_limit" class="form-control" placeholder="Please enter new credit limit" style="font-family: var(--color-text);" required min="1" step="1" title="Please enter a numeric value for the new credit limit (minimum 1)"/>
+                    </div>
+                    <input type="hidden" name="account_holder_id" value="{{ account_info[0] }}">
+                </div>
+                <div class="mt-2">
+                    <button type="submit" id="btn primary-button">
+                        Update Credit Limit
+                    </button>
+                    <a href="{{ url_for('manager_account_profile', account_holder_id=account_info[0]) }}" class="btn cancel-button ms-2">Cancel</a>
+                </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

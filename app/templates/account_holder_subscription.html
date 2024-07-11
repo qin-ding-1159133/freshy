@@ -1,0 +1,181 @@
+{% extends "layouts/base-dashboard.html" %} {% block title %} Account Holder Dashboard {% endblock %} {% block stylesheets %} {% endblock stylesheets %} 
+{% block content %}
+
+<!-- Preloader -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="mb-4">
+    My Subscription
+
+  </h4>
+  
+  <div class="card mb-4 p-3">
+    <div class="d-flex justify-content-between mb-4 mt-3">
+
+      <div class="d-flex">
+
+
+      </div>
+    </div>
+    {% if msg %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+    </div>
+    {% endif %}
+    <div class="d-flex">
+      <a href="/subscriptions">
+          <button class="btn">New Subscription</button>
+      </a>
+  </div><br>
+    <div class="">
+      <table class="table table-striped table-borderless table-hover p-4">
+        <tr class="table-success">
+          
+          <th class="p-4">Product Name</th>
+          <th class="p-4">Price</th>
+          <th class="p-4">Quantity</th>
+          <th class="p-4">Subscription type</th>
+          <th class="p-4">Subscribed date</th>
+          <th class="p-4">Status</th>
+          <th class="p-4">Next Pay Day</th>
+          <th class="p-4 text-center">Action</th>
+        </tr>
+
+        {% if my_sub_all %} 
+        {% for my_sub in my_sub_all %}
+        <tr class="table-warning">
+          <td class="p-4 acc-sub-text-center">{{ my_sub[2] }}</td>
+          <td class="p-4 acc-sub-text-center">{{ my_sub[3] }}</td>
+          <td class="p-4 acc-sub-text-center">{{ my_sub[4] }}</td>
+          <td class="p-4 acc-sub-text-center">{{ my_sub[5] }}</td>
+          <td class="p-4 acc-sub-text-center">{{ my_sub[6].strftime('%d %b %Y') }}</td>
+          <td class="p-4 acc-sub-text-center">{{ my_sub[7] }}</td>
+          {% if my_sub[8]=='' %}
+            <td></td>
+          {% else %}
+          <td class="p-4 acc-sub-text-center">{{ my_sub[8].strftime('%d %b %Y') }}</td>
+          {% endif %}
+          <td class="p-4 acc-sub-text-center">
+            <div class="account-subscription-wrapper">
+              {% if my_sub[7] != 'Cancelled' %}
+                <div class="account-subscription-btn-container">
+                  <button class="btn subscription-check" type="button" data-bs-toggle="modal" data-bs-target="#myModal_{{ my_sub[0] }}">Change Box</button>
+                </div>
+                <div class="account-subscription-btn-container">
+                  <button class="btn subscription-check" type="button" data-bs-toggle="modal" data-bs-target="#myModalcancel_{{ my_sub[0] }}">Cancel subscription</button>
+                </div>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        
+<!--cancel subscription-->
+
+<form
+action="/account/cancelsubscription/{{my_sub[0]}}"
+class="form row g-3 needs-validation"
+ novalidate
+>                  
+<!-- The Modal -->
+                  <div class="modal" id="myModalcancel_{{my_sub[0]}}">
+                    <div class="modal-dialog">
+                      <div class="modal-content" style="background-color: white;">
+      
+                        <!-- Modal Header -->
+                      <div class="modal-header">
+                      <h4 class="modal-title">Cancel Subscription</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+      
+                       <!-- Modal body -->
+                      <div class="modal-body">
+                      <row>
+            
+
+                      <input name="record_id" value="{{my_sub[0]}}" hidden>
+                        <div class="mb-3 mt-3">
+                          <label >Are you sure to cancel subscription? </label>
+
+                        </div>
+                      </div>
+                    </row>
+
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" class="btn btn-success">  
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                    <!--modal ends-->
+</form>
+        <!-- change subscription-->
+        <form
+        action="/account/subscription"
+        class="form row g-3 needs-validation"
+        method="post" novalidate
+    >                  
+        <!-- The Modal -->
+                          <div class="modal" id="myModal_{{my_sub[0]}}">
+                            <div class="modal-dialog">
+                              <div class="modal-content" style="background-color: white;">
+              
+                                <!-- Modal Header -->
+                              <div class="modal-header">
+                              <h4 class="modal-title">Change Subscription</h4>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+              
+                               <!-- Modal body -->
+                              <div class="modal-body">
+                              <row>
+                              <input name="record_id" value="{{my_sub[0]}}" hidden>
+                                <div class="mb-3 mt-3">
+                                  <label >Choose Box:</label>
+                                  <select class="selectpart1" id="box" name="box" required>
+                                  {% for box in all_box%}
+                                   <option {%if my_sub[1] == box[0]%} hidden {%endif%} value={{box[0]}}>{{box[1]}}, {{box[2]}},${{box[4]}}</option>
+                                   {%endfor%}
+
+                                  </select>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                  <label >Choose subscription type:</label>
+                                  <select class="selectpart1" id="subscriptiontype" name="subscriptiontype" required>
+                                   <option value='Weekly'>Weekly</option>
+                                   <option value='Biweekly'>Biweekly</option>
+                                   <option  value='Monthly'>Monthly</option>
+
+                                  </select>
+                                </div>
+                              </div>
+                            </row>
+        
+        
+                              <!-- Modal footer -->
+                              <div class="modal-footer">
+                                <input type="submit" class="btn btn-success">  
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                            </div>
+                            </div>
+                            <!--modal ends-->
+        </form>
+        {% endfor %} {% else %}
+        <tr class="table-warning">
+          <td colspan="8" class="p-4">
+            <div class="p-3">
+              <strong>No subscription found.</strong><br /><br />
+
+            </div>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

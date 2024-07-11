@@ -1,0 +1,399 @@
+{% extends "layouts/base.html" %} {% block title %} Sign Up As A Member {%
+endblock %} {% block stylesheets %} {% endblock stylesheets %} {% block content
+%}
+<div class="nav-dashboard p-5">
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+        <h1
+          class="mb-4 text-center"
+          style="font-weight: bold"
+        >
+          Sign Up As An Account Holder
+        </h1>
+        <p class="mb-4 text-center">
+          Already have an account?
+          <a
+            href="{{ url_for('homepage') }}"
+            style="color: #64aa5d; font-weight: bold; text-decoration: none"
+            >Please log in from hompage</a
+          >
+        </p>
+        <p class="mb-5 text-center">
+          Interested in becoming an account holder? Fill out the form below to
+          apply:
+        </p>
+        <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle" />
+      </div>
+    </div>
+  </div>
+  <div class="contact container">
+    <div class="row justify-content-lg-center">
+      {% if msg %}
+      <div
+        class="alert alert-danger alert-dismissible fade show d-flex align-items-center col-12 col-lg-9"
+        role="alert"
+      >
+        <div class="flex-grow-1">{{ msg }}</div>
+        <button
+          type="button"
+          class="btn-alert-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+          style="background-color: transparent"
+        ></button>
+      </div>
+      {% endif %}
+
+      <div class="col-12 col-lg-9">
+        <div
+          class="overflow-hidden p-5"
+          style="
+            background-color: var(--color-lemonYellow);
+            border-radius: 50px;
+            color: var(--color-text);
+          "
+        >
+          <!--register as account-->
+          <form
+            action="{{ url_for('account_register') }}"
+            method="POST"
+            class="form row g-3 needs-validation"
+            enctype="multipart/form-data"
+            novalidate
+          >
+            <input
+              name="role_type"
+              value="Account"
+              hidden
+            />
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-person"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="form-control"
+                placeholder="Username"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">Please enter the username.</div>
+            </div>
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-key"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="password"
+                name="password1"
+                id="password1"
+                class="form-control"
+                placeholder="Password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Must contain at least one number and one uppercase and lowercase
+                letter, and at least 8 or more characters
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-key"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="password"
+                name="password2"
+                id="password2"
+                class="form-control"
+                placeholder="Confirm Password"
+                aria-label="Confirm Password"
+                aria-describedby="basic-addon1"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Must contain at least one number and one uppercase and lowercase
+                letter, and at least 8 or more characters
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-person-vcard"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="text"
+                name="accountname"
+                id="accountname"
+                class="form-control"
+                placeholder="Coorporate Name"
+                aria-label="Given Name"
+                aria-describedby="basic-addon1"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Please enter Your Business's Name
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-envelope"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="form-control"
+                placeholder="name@example.com"
+                aria-label="Email"
+                aria-describedby="basic-addon1"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">Please enter the email.</div>
+            </div>
+
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-geo-alt"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                class="form-control"
+                placeholder="3 Greenlane...."
+                aria-label="Last Name"
+                aria-describedby="basic-addon1"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">Please enter your address</div>
+            </div>
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+              >
+                <i
+                  class="bi bi-buildings"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <select
+                class="form-select selectpart1 mb-2"
+                id="city"
+                name="city"
+                style="
+                  height: 50px;
+                  border-top-right-radius: 0;
+                  border-bottom-right-radius: 0;
+                  border: 1px solid #dee2e6;
+                  font-size: 1.2rem;
+                  font-family: var(--color-text);
+                  color: #6d6d6d;
+                  width: auto;
+                "
+              >
+                <option
+                  value=""
+                  disabled
+                >
+                  Choose Your City
+                </option>
+                <option value="{{depot_all[0][0]}}">{{depot_all[0][1]}}</option>
+                <option value="{{depot_all[1][0]}}">{{depot_all[1][1]}}</option>
+                <option value="{{depot_all[2][0]}}">{{depot_all[2][1]}}</option>
+                <option value="{{depot_all[3][0]}}">{{depot_all[3][1]}}</option>
+                <option value="{{depot_all[4][0]}}">{{depot_all[4][1]}}</option>
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+                ><i
+                  class="bi bi-telephone"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <input
+                type="number"
+                class="form-control"
+                id="phone"
+                name="phone"
+                placeholder="Phone Number"
+                min="0"
+                step="1"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                required
+              />
+              <div class="invalid-feedback">Please enter your Phone number</div>
+            </div>
+
+            <div class="input-group mb-3">
+              <input
+                class="form-control"
+                id="reason"
+                name="reason"
+                value="new account application"
+                style="
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  height: 50px;
+                "
+                hidden
+              />
+            </div>
+            <div
+              class="input-group mb-3"
+              style="width: 100%"
+            >
+              <span
+                class="input-group-text"
+                id="basic-addon1"
+                style="height: 50px"
+              >
+                <i
+                  class="bi bi-buildings"
+                  style="font-size: 1.4rem"
+                ></i>
+              </span>
+              <select
+                class="form-select selectpart1 mb-2"
+                id="credit"
+                name="credit"
+                style="
+                  height: 50px;
+                  border-top-right-radius: 0;
+                  border-bottom-right-radius: 0;
+                  border: 1px solid #dee2e6;
+                  font-size: 1.2rem;
+                  font-family: var(--color-text);
+                  color: #6d6d6d;
+                  width: auto;
+                "
+              >
+                <option
+                  value=""
+                  disabled
+                >
+                  Choose Your preferred credit per month:
+                </option>
+                <option value="500">$500</option>
+                <option value="1000">$1000</option>
+                <option value="1500">$1500</option>
+              </select>
+            </div>
+
+            <div class="mt-5 col-md-6">
+              <label class="fw-bold"
+                ><p>
+                  Please upload your certification of incorporation(*.jpg):
+                </p></label
+              >
+              <input
+                type="file"
+                id="image1"
+                name="image1"
+                accept="image/*"
+                style="font-family: var(--color-text)"
+                multiple
+              />
+            </div>
+
+            <div class="row gap-4 ps-3 pe-3">
+              <button
+                class="col yellow-black"
+                type="submit"
+                name="register"
+                style="font-size: 1.2rem"
+              >
+                Submit and Apply
+              </button>
+            </div>
+          </form>
+        </div>
+        <!--register as account ends-->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,79 @@
+{% extends "layouts/base-dashboard.html" %}
+{% block title %} Account Holder Request Status {% endblock %}
+{% block stylesheets %} {% endblock stylesheets %}
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+   
+    <h4 class="mb-4">
+        <span class="text-muted fw-light">Refund /</span> Request Status
+    </h4>
+    
+    <div class="card mb-4 p-3">
+        <!-- Filter Form -->
+        <div class="d-flex justify-content-between mb-4 mt-3">
+            <div>
+                <form method="GET" action="{{ url_for('account_holder_request_status') }}" class="d-flex gap-3">
+                    <select name="status_filter" id="status_filter" class="form-select text-capitalize" onchange="this.form.submit()">
+                        <option value="">All Request Status</option>
+                        <option value="pending" {% if request.args.get('status_filter') == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="rejected" {% if request.args.get('status_filter') == 'rejected' %}selected{% endif %}>Rejected</option>
+                        <option value="approved" {% if request.args.get('status_filter') == 'approved' %}selected{% endif %}>Approved</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <form action="/account-holder/request-status" class="form needs-validation" enctype="multipart/form-data" method="POST">
+            <div class="">
+                <table class="table table-striped table-borderless table-hover p-4">
+                    <tr class="table-success">
+                        <th class="p-4">Request ID</th>
+                        <th class="p-4">Order ID</th>
+                        <th class="p-4">Applied Date</th>
+                        <th class="p-4">Request Status</th>
+                        <th class="p-4">Check Details</th>
+                    </tr>
+                    {% if list_request %}
+                        {% for item in list_request %}
+                        <tr class="table-warning">
+                            <td class="p-4">{{item[0]}}</td>
+                            <td class="p-4">{{item[1]}}</td>
+                            <td class="p-4">{{item[2].strftime('%d %b %Y')}}</td>
+                            <td class="p-4">{{item[3]|capitalize}}</td>
+                            <td class="p-4">
+                                <button type="submit" id="form_id" name="form_id" value="{{item[0]}}">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% if request.args.get('status_filter') %}
+                        <tr class="table-warning">
+                            <td colspan="8" class="p-4">
+                                <div class="p-3">
+                                    <strong>No request found matching the filtered status.</strong><br /><br />
+                                    Please check another status or
+                                    <a href="{{ url_for('account_holder_request_status') }}" class="alert-link">view all requests</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr class="table-warning">
+                            <td colspan="8" class="p-4">
+                                <div class="p-3">
+                                    <strong>There is no refund request being submitted awaiting approval.</strong><br /><br />
+                                    <a href="{{ url_for('account_holder_return_authorization') }}" class="alert-link">Submit a refund request </a>if needed.
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endif %}
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

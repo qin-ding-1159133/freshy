@@ -1,0 +1,279 @@
+{% extends "layouts/manager.html" %} {% block title %} {% endblock %} {% block stylesheets %} {{ super() }}
+<link
+  href="{{ url_for('static', filename='assets/css/Dashboard.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %} 
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <!--shane temp starts-->
+        
+          <h4 class="mb-4">
+            <span class="text-muted fw-light">Manage Accounts / <a href="{{ url_for('manager_stafflist') }}" class="text-muted fw-light" style="text-decoration: none;">Staff List</a> / <a href="{{ url_for('manager_staff_profile',user_id1=profileinfo[0] ) }}" class="text-muted fw-light" style="text-decoration: none;">{{ profileinfo[3] }} {{ profileinfo[4] }}</a> / </span>Update Profile
+          </h4>
+
+          <div class="card mb-4 p-5">
+            <form
+              action="/manager/changestaffprofile/{{profileinfo[1]}}"
+              method="POST"
+              class="form needs-validation"
+              enctype="multipart/form-data"
+              novalidate
+            >
+              <!--list profile-->
+              <div class="row">
+                
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Title:</h6></label>
+                 <div> <select
+                  class="selectpart1 form-control"
+              id="title"
+              name="title"
+              style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;" 
+            >
+
+              <option value="Mr." {%if profileinfo[1] == 'Mr'%} selected {%endif%}>
+                Mr.
+              </option>
+              <option value="Ms."{%if profileinfo[1] == 'Ms.'%} selected {%endif%}>
+                Ms.
+              </option>
+              <option value="Miss."{%if profileinfo[1] == 'Miss.'%} selected {%endif%}>
+                Miss.
+              </option>
+              <option value="Mrs."{%if profileinfo[1] == 'Mrs.'%} selected {%endif%}>
+                Mrs.
+              </option>
+              <option value="Dr."{%if profileinfo[1] == 'Dr.'%} selected {%endif%}>
+                Dr.
+              </option>
+            </select></div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Given Name:</h6></label>
+                  <input
+                    class="form-control"
+                    id="first_name"
+                    name="first_name"
+                    value="{{profileinfo[3]}}"
+                    maxlength="30"
+
+                    size="10"
+                    style="font-family: var(--color-text);"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter the First Name
+                  </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Family Name:</h6></label>
+                  <input
+                    class="form-control"
+                    id="family_name"
+                    name="family_name"
+                    value="{{profileinfo[4]}}"
+                    maxlength="30"
+
+                    style="font-family: var(--color-text);"
+                    required
+                  />
+                  
+                  <div class="invalid-feedback">
+                    Please enter the Family Name
+                  </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Email:</h6></label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      id="email"
+                      name="email"
+                      value="{{profileinfo[5]}}"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter the right Email Address
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Phone:</h6></label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      value="{{profileinfo[6]}}"
+                      min="0"
+                      step="1"
+                      style="font-family: var(--color-text);"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter the Phone Number
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Depot:</h6></label>
+                    <div><select class="selectpart1 form-control" id="responsibility" name="depot" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[9] == depot_all[0][0] %} selected {%endif%} value="{{depot_all[0][0]}}">{{depot_all[0][1]}}</option>
+                      <option  {%if profileinfo[9] == depot_all[1][0]%} selected {%endif%} value="{{depot_all[1][0]}}">{{depot_all[1][1]}}</option>
+                      <option {%if profileinfo[9] == depot_all[2][0]%} selected {%endif%}  value="{{depot_all[2][0]}}">{{depot_all[2][1]}}</option>
+                      <option {%if profileinfo[9] == depot_all[3][0]%} selected {%endif%}  value="{{depot_all[3][0]}}">{{depot_all[3][1]}}</option>
+                      <option {%if profileinfo[9] == depot_all[4][0]%} selected {%endif%}  value="{{depot_all[4][0]}}">{{depot_all[4][1]}}</option>
+ 
+                    </select></div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Responsibility:</h6></label>
+                    <div><select class="selectpart1 form-control" id="responsibility" name="resp" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[8] == resp_all[0][0] %} selected {%endif%} value="{{resp_all[0][0]}}">{{resp_all[0][1]}}</option>
+                      <option  {%if profileinfo[8] == resp_all[1][0]%} selected {%endif%} value="{{resp_all[1][0]}}">{{resp_all[1][1]}}</option>
+                      <option {%if profileinfo[8] == resp_all[2][0]%} selected {%endif%}  value="{{resp_all[2][0]}}">{{resp_all[2][1]}}</option>
+                     </select></div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Role:</h6></label>
+                    <div><select class="selectpart1 form-control" id="responsibility" name="role" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[14] == role_all[0][0] %} selected {%endif%} value="{{role_all[0][0]}}">{{role_all[0][1]}}</option>
+                      <option  {%if profileinfo[14] == role_all[1][0]%} selected {%endif%} value="{{role_all[1][0]}}">{{role_all[1][1]}}</option>
+                      <option {%if profileinfo[14] == role_all[2][0]%} selected {%endif%}  value="{{role_all[2][0]}}">{{role_all[2][1]}}</option>
+                     </select></div>
+                  </div>
+
+
+                  <div class="mb-3 col-md-6">
+                    <label class="fw-bold"><h6>Status:</h6></label>
+                    <div><select class="selectpart1 form-control" id="responsibility" name="status" style="width: 100%; height: 38px; border: 1px solid #ced4da; border-radius: 5px;"  required>
+                      <option {%if profileinfo[11] == "Active" %} selected {%endif%} value="Active">Active</option>
+                      <option  {%if profileinfo[11] == "Inactive" %} selected {%endif%} value="Inactive">Inactive</option>
+                     </select></div>
+                  </div>
+
+          
+
+                <div class="mt-5 col-md-6">
+                  <label class="fw-bold"><h6>Upload New Image:</h6></label>
+                  <input
+                    type="file"
+                    id="image1"
+                    name="image1"
+                    accept="image/*"
+                    style="font-family: var(--color-text);"
+                    multiple
+                  />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                  <label class="fw-bold"><h6>Delete Current Image:</h6></label>
+                  <a
+                    class="btn "
+                    data-bs-toggle="modal"
+                    data-bs-target="#myModal"
+                    ><button >Delete</button></a
+                  >
+                <!-- The Modal -->
+                <div
+                  class="modal"
+                  id="myModal"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete</h4>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                        ></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure to delete the image?
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <a
+                          href="/manager/deletestaffimg/{{profileinfo[1]}}"
+                          class="btn fs-6 btn-success glow"
+                          >Yes</a
+                        >
+
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+  
+              {% if msg %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  {{ msg }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background-color: transparent;"></button>
+              </div>
+              {% endif %}
+
+                <div class="mt-2">
+                  <button
+                    type="submit"
+                    id="settings-button"
+                  >
+                    Save
+                  </button>
+
+                </div>
+              </div>
+            </form>
+          </div>
+       
+      
+    </div>
+
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      ;(() => {
+        'use strict'
+      
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+      
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            'submit',
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+      
+              form.classList.add('was-validated')
+            },
+            false
+          )
+        })
+      })()
+      </script>
+
+   
+  {% endblock content %}
+
+

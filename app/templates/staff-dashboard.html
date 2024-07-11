@@ -1,0 +1,760 @@
+{% extends "layouts/staff.html" %} 
+{% block title %} 
+Staff Dashboard 
+{% endblock %} 
+{% block stylesheets %} 
+{% endblock stylesheets %} 
+{% block content %}
+<div class="row">
+  <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-center gap-4">
+          <div class="flex-shrink-0 me-2 mb-3">
+            <div class="avatar">
+              <span
+                class="avatar-secondary bg-label-yellow d-flex align-items-center"
+                ><i
+                  class="bi bi-cart-check mb-3 me-2"
+                  style="font-size: 1.5rem"
+                ></i>
+              </span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p class="d-block mb-1">Total Orders</p>
+            <h3 class="card-title text-nowrap mb-2">{{ total_orders }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-center gap-4">
+          <div class="flex-shrink-0 me-2 mb-3">
+            <div class="avatar">
+              <span
+                class="avatar-secondary bg-label-success d-flex align-items-center"
+                ><i
+                  class="bi bi-wallet2 mb-3 me-2"
+                  style="font-size: 1.5rem"
+                ></i
+              ></span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p class="d-block mb-1">Total Revenue</p>
+            <h3 class="card-title text-nowrap mb-2">NZ$ {{ total_revenue }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-center gap-4">
+          <div class="flex-shrink-0 me-2 mb-3">
+            <div class="avatar">
+              <span
+                class="avatar-secondary bg-label-yellow d-flex align-items-center"
+              >
+                <i
+                  class="bi bi-person mb-3 me-2"
+                  style="font-size: 1.5rem"
+                ></i
+              ></span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p class="d-block mb-1">Total Customers</p>
+
+            <h3 class="card-title text-nowrap mb-2">{{total_customers}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-center gap-4">
+          <div class="flex-shrink-0 me-2 mb-3">
+            <div class="avatar">
+              <span
+                class="avatar-secondary bg-label-success d-flex align-items-center"
+              >
+                <i
+                  class="bi bi-box-seam mb-3 me-2"
+                  style="font-size: 1.5rem"
+                ></i>
+              </span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p class="d-block mb-1">Total Subscriptions</p>
+            <h3 class="card-title text-nowrap mb-2">{{total_subscriptions}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div class="left">
+                <h4>Recent Orders</h4>
+            </div>
+            {% if fresh == 'yes' %}
+            <div class="ms-3 reminder-box">
+              <p class="reminder-text" style="color: #64aa5d;">Refresh today's Subscription Orders</p>
+              <a href="/subscription/order" class="me-2">
+                  <button id="workshops-button" type="button">
+                      <i class="fas fa-sync-alt"></i> 
+                  </button>
+              </a>
+            </div>         
+            {% endif %}
+            <div class="right">
+                <div class="dropdown">
+                    <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu" style="width: 80px">
+                        <li>
+                            <a class="dropdown-item" type="button" href="{{ url_for('staff_order_incoming') }}">View More</a>
+                            <a class="dropdown-item" type="button" href="/staff/orderlist">Order Assignment</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+            {% if orders == [] %}
+            <p>There are no orders at the moment.</p>
+            {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><h6 class="text-sm text-medium">Customer/Account Holder Name</h6></th>
+                        <th class="min-width"><h6 class="text-sm text-medium">Order Date</h6></th>
+                        <th class="min-width"><h6 class="text-sm text-medium">Total</h6></th>
+                        <th class="min-width"><h6 class="text-sm text-medium ps-3">Status</h6></th>
+                        <th class="min-width"><h6 class="text-sm text-medium text-center">Details</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>
+                            <div class="product d-flex">
+                                {% if order.is_customer %}
+                                    <img src="{{ url_for('static', filename=order['customer_pic'].replace('app/static/', '')) }}" height="70" width="70" style="object-fit: cover; margin-right: 10px;" class="rounded-circle" />
+                                    <p class="text-sm pt-2" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;"><a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}">{{ order['full_name'] }}</a></p>
+                                {% else %}
+                                    <img src="{{ url_for('static', filename=order['account_pic'].replace('app/static/', '')) }}" height="70" width="70" style="object-fit: cover; margin-right: 10px;" class="rounded-circle" />
+                                    <p class="text-sm pt-2" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;"><a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}">{{ order['account_holder_name'] }}</a></p>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <p class="text-sm pt-2">{{ order['order_date'].strftime('%d %b %Y') }}</p>
+                        </td>
+                        <td>
+                            {% if order['total_amount'] is none or order['total_amount'] == '' %}
+                            <p class="text-sm pt-2">Pending</p>
+                            {% else %}
+                            <p class="text-sm pt-2">${{ order['total_amount'] }}</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                          {% if order.delivery_status == 'Preparing' %}
+                          <div class="pt-2">
+                            <a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}" class="status-btn refund-btn">Preparing</a>
+                          </div>
+                          {% elif order.delivery_status == 'Ready for delivery' %}
+                          <div class="pt-2">
+                            <a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}" class="status-btn ready-for-delivery-btn">Ready for delivery</a>
+                          </div>
+                          {% elif order.delivery_status == 'On delivery vehicle' %}
+                          <div class="pt-2">
+                            <a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}" class="status-btn on-delivery-vehicle-btn">On delivery vehicle</a>
+                          </div>
+                          {% elif order.delivery_status == 'Delivered' %}
+                          <div class="pt-2">
+                            <a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}" class="status-btn completed-btn">Delivered</a>
+                          </div>
+                          {% else %}
+                          <div class="pt-2">
+                            <a href="{{ url_for('staff_order_incoming_detail', order_id=order.order_id) }}" class="status-btn pending-btn">Pending</a>
+                          </div>
+                          {% endif %}
+                        </td>
+                        <td>
+                            <div class="action text-center">
+                                <a href="{{ url_for('staff_order_incoming_detail', order_id=order['order_id']) }}" class="btn"><i class="bi bi-search"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div class="left">
+                <h4>Produces</h4>
+            </div>
+            <div class="right">
+                <div class="dropdown">
+                    <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu" style="width: 80px">
+                        <li>
+                            <a class="dropdown-item" type="button" href="/staff/product-list">View More</a>
+                            <a class="dropdown-item" type="button" href="/staff/product-list/add-product">Add Produce</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end select -->
+            </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          {% if recent_products == [] %}
+            There are no produces.
+          {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h6 class="text-sm text-medium">Produce Name</h6>
+                        </th>
+                        <th class="min-width">
+                            <h6 class="text-sm text-center">Category</h6>
+                        </th>
+                        <th class="min-width">
+                            <h6 class="text-sm text-center">Price</h6>
+                        </th>
+                        <th class="min-width">
+                            <h6 class="text-sm text-center">Stock</h6>
+                        </th>
+
+                        <th class="min-width">
+                            <h6 class="text-sm text-medium text-center">
+                                Details <i class="lni lni-arrows-vertical"></i>
+                            </h6>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for product in recent_products %}
+                  <tr>
+                      <td>
+                          <div class="product d-flex">
+                              <img
+                              src="{{ url_for('static', filename=product[5].replace('app/static/', '')) }}"
+                              height="70"
+                              width="70"
+                              />
+                              <p class="text-sm pt-2"
+                              style="
+                                display: -webkit-box;
+                                -webkit-line-clamp: 1;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                              "><a href="/staff/product-list/product?product_id={{product[0]}}">{{product[2]}}</a></p>
+                          </div>
+                      </td>
+                      <td>
+                          <p class="text-sm pt-2 text-center">{{product[1]}}</p>
+                      </td>
+                      <td>
+                          <p class="text-sm pt-2 text-center">NZ${{product[4]}}</p>
+                      </td>
+                      <td>
+                          <p class="text-sm pt-2 text-center">{{product[3]}}</p>
+                      </td>
+
+                      <td>
+                          <div class="action text-center">
+                              <a href="/staff/product-list/product?product_id={{product[0]}}" class="btn">
+                                  <i class="bi bi-search"></i>
+                              </a>
+                          </div>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4 order-1 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+        >
+          <div class="left">
+            <h4>Premade Boxes</h4>
+          </div>
+          <div class="right">
+            <div class="dropdown">
+                <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu" style="width: 80px">
+                    <li>
+                        <a class="dropdown-item" type="button" href="/staff/premade-box-list">View More</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- end select -->
+        </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          {% if recent_boxes == [] %}
+            There are no premade boxes.
+          {% else %}
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>
+                          <h6 class="text-sm text-medium">Box Name</h6>
+                      </th>
+                      <th class="min-width">
+                          <h6 class="text-sm text-center">Unit</h6>
+                      </th>
+                      <th class="min-width">
+                          <h6 class="text-sm text-center">Price</h6>
+                      </th>
+                      <th class="min-width">
+                          <h6 class="text-sm text-end">Stock</h6>
+                      </th>
+
+                      <th class="min-width">
+                          <h6 class="text-sm text-medium text-center">
+                              Details <i class="lni lni-arrows-vertical"></i>
+                          </h6>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for box in recent_boxes %}
+                <tr>
+                    <td>
+                        <div class="product d-flex">
+                            <img
+                            src="{{ url_for('static', filename=box[5].replace('app/static/', '')) }}"
+                            height="70"
+                            width="70"
+                            />
+                           <p class="text-sm pt-2"
+                           style="
+                             display: -webkit-box;
+                             -webkit-line-clamp: 1;
+                             -webkit-box-orient: vertical;
+                             overflow: hidden;
+                           "><a href="/staff/premade-box-list/premade-box?product_id={{box[0]}}"
+                            > {{box[1]}}</a></p> 
+                        </div>
+                    </td>
+                    <td>
+                        <p class="text-sm pt-2 text-center">{{box[2]}}</p>
+                    </td>
+                    <td>
+                        <p class="text-sm pt-2 text-center">NZ${{box[4]}}</p>
+                    </td>
+                    <td>
+                        <p class="text-sm pt-2 text-center">{{box[3]}}</p>
+                    </td>
+
+                    <td>
+                        <div class="action text-center">
+                            <a href="/staff/premade-box-list/premade-box?product_id={{box[0]}}" class="btn">
+                                <i class="bi bi-search"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4 order-2 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div class="left">
+                <h4>Active Subscriptions</h4>
+            </div>
+            <div class="right">
+              <div class="dropdown">
+                  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu" style="width: 80px">
+                      <li>
+                          <a class="dropdown-item" type="button" href="/staff/subscription-list">View More</a>
+                      </li>
+                  </ul>
+              </div>
+              <!-- end select -->
+            </div>
+        </div>
+
+        <div class="table-responsive">
+          {% if recent_subscription == [] %}
+            There are no subscription.
+          {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h6 class="text-sm text-medium">Name</h6>
+                        </th>
+                        <th class="min-width">
+                            <h6 class="text-sm text-medium text-center">Subscription Date</h6>
+                        </th>
+                        <th class="min-width">
+                            <h6 class="text-sm text-medium text-end">Subscription Type</h6>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for subscription in recent_subscription %}
+                  <tr>
+                    <td>
+                      <div class="product d-flex gap-2">
+                          {% if subscription[8] %}
+                              <a href="/staff/customerprofile/{{ subscription[1] }}" class="text-sm pt-2"
+                                  style="
+                                  display: -webkit-box;
+                                  -webkit-line-clamp: 1;
+                                  -webkit-box-orient: vertical;
+                                  overflow: hidden;
+                                  "> {{ subscription[8] }} </a>
+                          {% elif subscription[9] %}
+                          <a href="/staff/accountlist/profile?user_id={{ subscription[1] }}" class="text-sm pt-2"
+                          style="
+                              display: -webkit-box;
+                              -webkit-line-clamp: 1;
+                              -webkit-box-orient: vertical;
+                              overflow: hidden;
+                          "> {{ subscription[9] }} </a>
+                          {% endif %}
+                      </div>
+                  </td>
+                  
+                      <td>
+                          <p class="text-sm pt-2 text-center">{{ subscription[2].strftime('%d %b %Y') }}</p>
+                      </td>
+                      <td>
+                          <div class="mt-1 text-end">
+                              <p class="text-sm pt-2">{{ subscription[5] }}</p>
+                          </div>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-lg-6 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+        >
+          <div class="left">
+            <h4>Customer</h4>
+          </div>
+          <div class="right">
+            <div class="dropdown">
+              <button
+                class="btn"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul
+                class="dropdown-menu"
+                style="width: 80px"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    type="button"
+                    href="{{url_for('staff_customerlist')}}"
+                  >
+                    View More
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- end select -->
+          </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          {% if recent_customers == [] %}
+            There are no customers
+          {% else %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  <h6 class="text-sm text-medium">Name</h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium text-end">Email</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for customer in recent_customers %}
+              <tr>
+                <td>
+                  <div class="product d-flex gap-2">
+                    <img
+                      src="{{ url_for('static', filename=customer[9].replace('app/static/', '')) }}"
+                      class="rounded-circle"
+                      style="height: 70px; width: 70px"
+                    />
+                    <a
+                      class="text-sm pt-2"
+                      style="
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                      "
+                      href="/staff/customerprofile/{{customer[0]}}"
+                    >
+                      {{customer[1]+' '+customer[2]+' '+customer[3]}}
+                    </a>
+                  </div>
+                </td>
+
+                <td>
+                  <p class="text-sm pt-2 text-end">{{customer[4]}}</p>
+                </td>
+              </tr>
+              
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6 mb-4">
+    <div class="card p-3">
+      <div class="card-body">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+        >
+          <div class="left">
+            <h4>Account Holder</h4>
+          </div>
+          <div class="right">
+            <div class="dropdown">
+              <button
+                class="btn"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul
+                class="dropdown-menu"
+                style="width: 80px"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    type="button"
+                    href="{{url_for('staff_account_list')}}"
+                  >
+                    View More
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- end select -->
+          </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          {% if recent_accounts ==[] %}
+            There are no account holders.
+          {% else %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  <h6 class="text-sm text-medium">Name</h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium text-end">Balance</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>                
+              {% for account in recent_accounts %}
+              <tr>
+                <td>
+                  <div class="product d-flex gap-2">
+                    <img
+                      src="{{ url_for('static', filename=account[7].replace('app/static/', '')) }}"
+                      class="rounded-circle"
+                      style="height: 70px; width: 70px"
+                    />
+                    <a
+                      class="text-sm pt-2"
+                      style="
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                      "
+                      href="/manager/accountlist/profile?account_holder_id={{account[0]}}"
+                    >
+                      {{account[2]}}
+                    </a>
+                  </div>
+                </td>
+
+                <td>
+                  <p class="text-sm pt-2 text-end">NZ${{account[9]}}</p>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+    <div class="col-12 mb-4">
+      <div class="card p-3">
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+              <div class="left">
+                  <h4>Latest News</h4>
+              </div>
+              <div class="right">
+                  <div class="dropdown">
+                      <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu" style="width: 80px">
+                          <li>
+                              <a class="dropdown-item" type="button" href="{{ url_for('staff_news') }}">View More</a>
+                          </li>
+                      </ul>
+                  </div>
+                  <!-- end select -->
+              </div>
+          </div>
+          <!-- End Title -->
+          <div class="table-responsive">
+            {% if recent_news == [] %}
+              There are no news.
+            {% else %}
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>
+                              <h6 class="text-sm text-medium">Title</h6>
+                          </th>
+                          <th class="min-width">
+                              <h6 class="text-sm text-medium text-center">Publish Date</h6>
+                          </th>
+                          <th class="min-width">
+                              <h6 class="text-sm text-medium text-center">Published By</h6>
+                          </th>
+                          <th class="min-width">
+                              <h6 class="text-sm text-medium text-end">Details</h6>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for news in recent_news %}
+                    <tr>
+                        <td>
+                            <div class="product d-flex gap-2">
+                                <img
+                                src="{{ url_for('static', filename=news[4].replace('app/static/', '')) }}"
+                                height="70"
+                                width="70"
+                                />
+                                <a href="{{ url_for('staff_news_details', news_id=news[0]) }}" class="text-sm pt-2"
+                                style="
+                                  display: -webkit-box;
+                                  -webkit-line-clamp: 1;
+                                  -webkit-box-orient: vertical;
+                                  overflow: hidden;
+                                "> {{ news[1] }} </a>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="text-sm pt-2 text-center">{{ news[2].strftime('%d %b %Y') }}</p>
+                        </td>
+                        <td>
+                            <div class="mt-1 text-center">
+                                <p class="text-sm pt-2">{{ news[3] }}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action text-end">
+                                <a href="{{ url_for('staff_news_details', news_id=news[0]) }}" class="btn">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    
+</div>
+{% endblock content %}
